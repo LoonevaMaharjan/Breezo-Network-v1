@@ -5,16 +5,18 @@ import DashboardPage from './pages/DashboardPage'
 import NetworkPage from './pages/NetworkPage'
 import AboutPage from './pages/AboutPage'
 import TokenizationPage from './pages/TokenizationPage'
+import WaitlistPage from './pages/WaitlistPage'
 
 export default function App() {
   return (
     <Layout>
       <Routes>
-        <Route path="/"          element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/tokenization" element={<TokenizationPage />} />
-        <Route path="/network"   element={<NetworkPage />} />
-        <Route path="/about"     element={<AboutPage />} />
+        <Route path="/waitlist" element={<WaitlistPage />} />
+        <Route path="/network" element={<NetworkPage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Layout>
   )

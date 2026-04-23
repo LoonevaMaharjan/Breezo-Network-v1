@@ -59,11 +59,6 @@ export default function MetricsGrid({ data }) {
           <MetricCard key={metric.key} metric={metric} value={data?.[metric.key]} />
         ))}
         <InfoCard
-          label="Device ID"
-          value={data?.deviceId}
-          note="Use this as the secure link between your device registry, backend, and token rewards."
-        />
-        <InfoCard
           label="GPS"
           value={formatGps(data?.gps)}
           note={data?.gps?.source === 'City profile' ? 'Using fallback city coordinates until live GPS is connected.' : 'Live coordinates from the GPS module.'}

@@ -5,27 +5,27 @@ import styles from './HowItWorks.module.css'
 const STEPS = [
   {
     num: '01',
-    icon: '📡',
+    icon: 'Sensor',
     title: 'Deploy & Monitor',
-    desc: 'Install precision multi-parameter sensor nodes across urban areas. Each node measures PM2.5, PM10, CO₂, NO₂, temperature, humidity, and atmospheric pressure — continuously, in real time.',
+    desc: 'Install BREEZO devices built around PM2.5, DHT22, MQ135, BMP180, and GPS modules for continuous local air monitoring.',
   },
   {
     num: '02',
-    icon: '⚡',
+    icon: 'Data',
     title: 'Transmit & Process',
-    desc: 'Data streams from every node via WiFi/4G to our cloud pipeline. Aggregated, validated, and structured with sub-minute latency. Accessible via dashboard and REST API.',
+    desc: 'Each ESP32 streams validated device telemetry to the BREEZO pipeline, where readings are normalized for the dashboard and future backend APIs.',
   },
   {
     num: '03',
-    icon: '🧠',
-    title: 'Analyze & Predict',
-    desc: 'AI models analyze historical patterns with weather data to deliver 7-day AQI forecasts. Proactive health planning instead of reactive emergency response.',
+    icon: 'AQI',
+    title: 'Analyze & Visualize',
+    desc: 'PM2.5 readings are converted into AQI, combined with temperature, humidity, pressure, gas sensor, and GPS context, then shown city by city.',
   },
   {
     num: '04',
-    icon: '🪙',
+    icon: 'Token',
     title: 'Earn & Expand',
-    desc: 'Node operators earn $BREEZ tokens on Solana based on uptime, data consistency, and coverage quality. Economic incentives drive rapid, community-owned network expansion.',
+    desc: 'Operators will earn $BREEZO on Solana for verified uptime, coverage, and quality once the backend scoring and settlement layer goes live.',
   },
 ]
 
@@ -40,7 +40,7 @@ export default function HowItWorks() {
             <SectionLabel>How It Works</SectionLabel>
             <SectionTitle>Four layers, one network.</SectionTitle>
             <SectionSubtitle>
-              From hardware on a rooftop to token rewards on-chain — the complete BREEZO loop.
+              From rooftop hardware to token rewards on-chain, this is the complete BREEZO loop.
             </SectionSubtitle>
           </div>
 
@@ -58,5 +58,4 @@ export default function HowItWorks() {
       </div>
     </section>
   )
-
 }

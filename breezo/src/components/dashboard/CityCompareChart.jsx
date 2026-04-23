@@ -10,10 +10,9 @@ import {
   ReferenceLine,
 } from 'recharts'
 import { useMultiCityAQI } from '../../hooks/useAirQuality'
+import { getActiveDeviceCityKeys } from '../../lib/tokenizationApi'
+import { CITIES } from '../../lib/aqi'
 import styles from './CityCompareChart.module.css'
-
-const ALL_CITIES = ['ktm', 'pkr', 'del', 'mum', 'lko', 'dac']
-const CITY_SHORT  = { ktm:'KTM', pkr:'PKR', del:'DEL', mum:'MUM', lko:'LKO', dac:'DAC' }
 
 function CustomTooltip({ active, payload }) {
   if (!active || !payload?.length) return null
@@ -28,13 +27,14 @@ function CustomTooltip({ active, payload }) {
 }
 
 export default function CityCompareChart() {
-  const cityData = useMultiCityAQI(ALL_CITIES)
+  const cityKeys = getActiveDeviceCityKeys()
+  const cityData = useMultiCityAQI(cityKeys)
 
-  const chartData = ALL_CITIES.map((key) => {
+  const chartData = cityKeys.map((key) => {
     const d = cityData[key]
     return {
-      city: CITY_SHORT[key],
-      fullName: key === 'ktm' ? 'Kathmandu' : key === 'pkr' ? 'Pokhara' : key === 'del' ? 'Delhi' : key === 'mum' ? 'Mumbai' : key === 'lko' ? 'Lahore' : 'Dhaka',
+      city: CITIES[key].label.slice(0, 3).toUpperCase(),
+      fullName: CITIES[key].label,
       aqi: d?.aqi ?? 0,
       color: d?.info?.color ?? '#475569',
       status: d?.info?.label ?? '—',
@@ -44,8 +44,8 @@ export default function CityCompareChart() {
   return (
     <div className={styles.panel}>
       <div className={styles.header}>
-        <h3 className={styles.title}>City Comparison — Live AQI</h3>
-        <span className={styles.badge}>6 cities</span>
+        <h3 className={styles.title}>Device City Comparison — Live AQI</h3>
+        <span className={styles.badge}>{cityKeys.length} cities</span>
       </div>
 
       <ResponsiveContainer width="100%" height={220}>

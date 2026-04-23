@@ -77,7 +77,7 @@ export default function TokenizationPanel({ cityName, data }) {
           <div className={styles.heroTop}>
             <div>
               <div className={styles.heroLabel}>Settlement layer</div>
-              <div className={styles.heroValue}>Solana + $BREEZ</div>
+              <div className={styles.heroValue}>Solana + $BREEZO</div>
             </div>
             <span className={styles.heroState}>Designing tokenomics</span>
           </div>

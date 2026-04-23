@@ -103,7 +103,7 @@ export default function Navbar() {
           </div>
         ) : (
           <button className={styles.ctaBtn} onClick={() => navigate('/tokenization')}>
-            Operator Login
+            Login
           </button>
         )}
         <button

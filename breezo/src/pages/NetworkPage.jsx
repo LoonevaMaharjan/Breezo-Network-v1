@@ -22,7 +22,7 @@ const REWARD_TIERS = [
 
 const ROADMAP = [
   { phase: 'Phase 1', label: 'Foundation',   status: 'active',   items: ['Kathmandu pilot deployment', '20 sensor nodes live', 'Dashboard v1 launched', 'Data API (beta)'] },
-  { phase: 'Phase 2', label: 'Tokenization', status: 'upcoming', items: ['$BREEZ token launch on Solana', 'Reward distribution smart contracts', 'Node operator dashboard', 'Testnet incentives'] },
+  { phase: 'Phase 2', label: 'Tokenization', status: 'upcoming', items: ['$BREEZO token launch on Solana', 'Reward distribution smart contracts', 'Node operator dashboard', 'Testnet incentives'] },
   { phase: 'Phase 3', label: 'Expansion',    status: 'planned',  items: ['Delhi, Mumbai, Lahore rollout', '500+ nodes deployed', 'Mobile app with alerts', 'Government data partnerships'] },
   { phase: 'Phase 4', label: 'Intelligence', status: 'planned',  items: ['AI-powered 7-day forecasts', 'On-chain data validation', 'Smart city API integrations', 'Regional DePIN standard'] },
 ]
@@ -214,7 +214,7 @@ export default function NetworkPage() {
       <RevealSection>
         <section className={`${styles.section} ${styles.darkSection}`}>
           <SectionLabel>Token Incentives</SectionLabel>
-          <SectionTitle>Earn $BREEZ for good data.</SectionTitle>
+          <SectionTitle>Earn $BREEZO for good data.</SectionTitle>
           <SectionSubtitle>
             Node operators are rewarded based on uptime, data quality, and geographic coverage.
             Better performance means higher multipliers.
@@ -241,7 +241,7 @@ export default function NetworkPage() {
           </div>
           <div className={styles.formulaBox}>
             <span className={styles.formulaLabel}>On-chain reward formula</span>
-            <code className={styles.formulaCode}>$BREEZ = BASE_RATE × f(uptime) × f(quality) × f(coverage_bonus)</code>
+            <code className={styles.formulaCode}>$BREEZO = BASE_RATE × f(uptime) × f(quality) × f(coverage_bonus)</code>
           </div>
         </section>
       </RevealSection>

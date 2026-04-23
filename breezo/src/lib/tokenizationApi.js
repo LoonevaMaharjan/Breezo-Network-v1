@@ -1,3 +1,5 @@
+import { getActiveDeviceCityKeys as getDeviceCityKeys } from './deviceDemo'
+
 export const TOKENIZATION_DEMO_STORAGE_KEY = 'breezo-tokenization-demo-data'
 
 const DEFAULT_OPERATOR_ACCOUNTS = [
@@ -193,6 +195,10 @@ export function getDemoOperatorAccounts() {
     deviceId: account.credentials.deviceId,
     ownerName: account.dashboard.owner.name,
   }))
+}
+
+export function getActiveDeviceCityKeys() {
+  return getDeviceCityKeys()
 }
 
 export async function loginOperator({ email, deviceId }) {

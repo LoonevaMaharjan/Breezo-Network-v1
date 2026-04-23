@@ -14,7 +14,7 @@ export default function Footer() {
         <div className={styles.col}>
           <h4>Network</h4>
           <ul>
-            <li><a href="#">Deploy a Node</a></li>
+            <li><Link to="/waitlist">Join Waitlist</Link></li>
             <li><Link to="/dashboard">Live Dashboard</Link></li>
             <li><a href="#">Data API</a></li>
             <li><a href="#">Node Registry</a></li>
@@ -23,7 +23,7 @@ export default function Footer() {
         <div className={styles.col}>
           <h4>Token</h4>
           <ul>
-            <li><a href="#">$BREEZ Tokenomics</a></li>
+            <li><a href="#">$BREEZO Tokenomics</a></li>
             <li><a href="#">Reward Calculator</a></li>
             <li><a href="#">On-chain Explorer</a></li>
           </ul>

@@ -11,7 +11,7 @@ const PROBLEM_POINTS = [
 const SOLUTION_POINTS = [
   { icon: '🌐', label: 'Distributed', desc: 'Anyone can deploy a node. Network grows organically.' },
   { icon: '🔗', label: 'Transparent', desc: 'Data and rewards visible on-chain. No black box.' },
-  { icon: '💸', label: 'Incentivized', desc: '$BREEZ tokens reward every quality data contribution.' },
+  { icon: '💸', label: 'Incentivized', desc: '$BREEZO tokens reward every quality data contribution.' },
   { icon: '📡', label: 'Real-time',   desc: 'Sub-minute latency from sensor to dashboard.' },
   { icon: '🗺️', label: 'Hyperlocal',  desc: 'Street-level resolution no central system can match.' },
   { icon: '🌍', label: 'Open',        desc: 'Public API, open data — for research, policy, and citizens.' },

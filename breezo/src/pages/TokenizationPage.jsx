@@ -306,13 +306,13 @@ export default function TokenizationPage() {
 
       <section className={styles.metricsGrid}>
         <MetricTile
-          label="Claimable $BREEZ"
+          label="Claimable $BREEZO"
           value={metrics.claimableRewards.toFixed(1)}
           note="Ready for operator claim after settlement confirmation."
           tone="sky"
         />
         <MetricTile
-          label="Pending $BREEZ"
+          label="Pending $BREEZO"
           value={metrics.pendingRewards.toFixed(1)}
           note="Estimated rewards for the current settlement cycle."
           tone="teal"
@@ -379,7 +379,7 @@ export default function TokenizationPage() {
             <div className={styles.routeCard}>
               <div className={styles.routeTop}>
                 <span className={styles.routeLabel}>Lifetime rewards</span>
-                <span className={styles.routeValue}>{metrics.lifetimeRewards.toFixed(1)} $BREEZ</span>
+                <span className={styles.routeValue}>{metrics.lifetimeRewards.toFixed(1)} $BREEZO</span>
               </div>
               <p className={styles.routeText}>Total settled and attributed rewards for this registered device.</p>
             </div>
@@ -393,7 +393,7 @@ export default function TokenizationPage() {
             <div className={styles.routeCard}>
               <div className={styles.routeTop}>
                 <span className={styles.routeLabel}>Staked amount</span>
-                <span className={styles.routeValue}>{staking.stakedAmount} $BREEZ</span>
+                <span className={styles.routeValue}>{staking.stakedAmount} $BREEZO</span>
               </div>
               <p className={styles.routeText}>Lock status: {staking.lockStatus}. Slash risk: {staking.slashRisk}.</p>
             </div>
@@ -424,7 +424,7 @@ export default function TokenizationPage() {
               <div className={styles.historyRow} key={row.epoch}>
                 <span>{row.epoch}</span>
                 <span>{row.score}%</span>
-                <span>{row.rewards.toFixed(1)} $BREEZ</span>
+                <span>{row.rewards.toFixed(1)} $BREEZO</span>
                 <span>{row.status}</span>
               </div>
             ))}
@@ -450,7 +450,7 @@ export default function TokenizationPage() {
               <div className={styles.historyRow} key={row.signature}>
                 <span>{row.signature}</span>
                 <span>{row.type}</span>
-                <span>{row.amount.toFixed(1)} $BREEZ</span>
+                <span>{row.amount.toFixed(1)} $BREEZO</span>
                 <span>{row.status}</span>
               </div>
             ))}

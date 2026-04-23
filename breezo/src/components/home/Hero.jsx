@@ -1,17 +1,18 @@
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMultiCityAQI } from '../../hooks/useAirQuality'
+import { getActiveDeviceCityKeys } from '../../lib/tokenizationApi'
 import { Chip, LivePill } from '../ui/UI'
-import { useEffect, useRef } from 'react'
 import styles from './Hero.module.css'
 
-const HERO_CITIES = ['ktm', 'pkr', 'del', 'mum']
-const CITY_LABELS = { ktm: 'Kathmandu', pkr: 'Pokhara', del: 'Delhi', mum: 'Mumbai' }
+const CITY_LABELS = { ktm: 'Kathmandu', pkr: 'Pokhara', del: 'Delhi' }
 
 function AQICell({ cityKey, data }) {
   const info = data?.info
+
   return (
     <div className={styles.cityCell}>
-      <div className={styles.cityName}>{CITY_LABELS[cityKey]}</div>
+      <div className={styles.cityName}>{CITY_LABELS[cityKey] ?? cityKey.toUpperCase()}</div>
       {data ? (
         <>
           <div className={styles.cityAQI} style={{ color: info.color }}>
@@ -22,7 +23,7 @@ function AQICell({ cityKey, data }) {
           </span>
         </>
       ) : (
-        <div className={styles.cityAQI} style={{ color: 'var(--t3)' }}>—</div>
+        <div className={styles.cityAQI} style={{ color: 'var(--t3)' }}>--</div>
       )}
     </div>
   )
@@ -41,7 +42,6 @@ function NetworkCanvas() {
       { label: 'KTM', r: 80, angle: 0.3, speed: 0.0008 },
       { label: 'PKR', r: 80, angle: 1.8, speed: 0.0008 },
       { label: 'DEL', r: 120, angle: 0.9, speed: 0.0005 },
-      { label: 'MUM', r: 120, angle: 2.4, speed: 0.0005 },
       { label: 'S7', r: 60, angle: 4.2, speed: 0.0012 },
       { label: 'S12', r: 100, angle: 3.5, speed: 0.0007 },
       { label: 'API', r: 90, angle: 5.8, speed: 0.0009 },
@@ -57,16 +57,16 @@ function NetworkCanvas() {
 
       ctx.strokeStyle = 'rgba(56,189,248,0.07)'
       ctx.lineWidth = 1
-      ;[60, 100, 140].forEach((r) => {
+      ;[60, 100, 140].forEach((radius) => {
         ctx.beginPath()
-        ctx.arc(cx, cy, r, 0, Math.PI * 2)
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2)
         ctx.stroke()
       })
 
-      nodes.forEach((n) => {
-        const a = n.angle + tick * n.speed
-        const x = cx + Math.cos(a) * n.r
-        const y = cy + Math.sin(a) * n.r
+      nodes.forEach((node) => {
+        const angle = node.angle + tick * node.speed
+        const x = cx + Math.cos(angle) * node.r
+        const y = cy + Math.sin(angle) * node.r
 
         ctx.setLineDash([3, 6])
         ctx.strokeStyle = 'rgba(56,189,248,0.2)'
@@ -86,10 +86,10 @@ function NetworkCanvas() {
         ctx.stroke()
 
         ctx.fillStyle = 'rgba(56,189,248,0.85)'
-        ctx.font = 'bold 7px DM Mono,monospace'
+        ctx.font = 'bold 7px DM Mono, monospace'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        ctx.fillText(n.label, x, y)
+        ctx.fillText(node.label, x, y)
       })
 
       ctx.beginPath()
@@ -100,10 +100,10 @@ function NetworkCanvas() {
       ctx.lineWidth = 2
       ctx.stroke()
       ctx.fillStyle = 'rgba(56,189,248,0.9)'
-      ctx.font = 'bold 7px DM Mono,monospace'
+      ctx.font = 'bold 7px DM Mono, monospace'
       ctx.fillText('CORE', cx, cy)
 
-      tick++
+      tick += 1
       raf = requestAnimationFrame(draw)
     }
 
@@ -111,6 +111,7 @@ function NetworkCanvas() {
       canvas.width = canvas.offsetWidth
       canvas.height = canvas.offsetHeight
     }
+
     resize()
     draw()
 
@@ -126,8 +127,10 @@ function NetworkCanvas() {
 
 export default function Hero() {
   const navigate = useNavigate()
-  const cityData = useMultiCityAQI(HERO_CITIES)
-  const ktm = cityData.ktm
+  const heroCities = getActiveDeviceCityKeys()
+  const cityData = useMultiCityAQI(heroCities)
+  const leadKey = heroCities[0]
+  const leadCity = cityData[leadKey]
 
   return (
     <section className={styles.hero}>
@@ -137,14 +140,15 @@ export default function Hero() {
       <div className={`${styles.heroContent} fade-up d1`}>
         <Chip>DePIN · Air Quality · Solana</Chip>
         <h1 className={styles.h1}>
-          Turning<br />
-          <span className={styles.skyText}>invisible air</span><br />
+          Turning
+          <br />
+          <span className={styles.skyText}>invisible air</span>
+          <br />
           <span className={styles.dimText}>into visible truth.</span>
         </h1>
         <p className={styles.heroP}>
-          BREEZO Network is a decentralized air quality monitoring infrastructure.
-          Community-deployed IoT sensors. Real-time data. Token-incentivized contributors.
-          Built for South Asia.
+          BREEZO Network is a decentralized air quality monitoring infrastructure powered by our own AQI devices.
+          Live readings. Real cities. Token-incentivized contributors. Built for South Asia.
         </p>
         <div className={styles.heroBtns}>
           <button className={styles.btnSky} onClick={() => navigate('/dashboard')}>
@@ -155,7 +159,7 @@ export default function Hero() {
             Live Dashboard
           </button>
           <button className={styles.btnGhost} onClick={() => navigate('/network')}>
-            Explore Network →
+            Explore Network {'->'}
           </button>
         </div>
       </div>
@@ -163,27 +167,27 @@ export default function Hero() {
       <div className={`${styles.aqiPanel} fade-up d4`}>
         <div className={styles.aqiCard}>
           <div className={styles.aqiCardHeader}>
-            <span className={styles.aqiCardTitle}>BREEZO Network · Live</span>
+            <span className={styles.aqiCardTitle}>BREEZO Device Network · Live</span>
             <LivePill />
           </div>
 
           <div className={styles.cityGrid}>
-            {HERO_CITIES.map((key) => (
+            {heroCities.map((key) => (
               <AQICell key={key} cityKey={key} data={cityData[key]} />
             ))}
           </div>
 
           <div className={styles.pollutantBar}>
             {[
-              { label: 'PM2.5', value: ktm?.pm25 },
-              { label: 'AQI', value: ktm?.aqi },
+              { label: 'PM2.5', value: leadCity?.pm25 },
+              { label: 'AQI', value: leadCity?.aqi },
               { label: 'DHT22', value: null },
               { label: 'MQ135', value: null },
               { label: 'GPS', value: null },
-            ].map((p) => (
-              <div className={styles.pChip} key={p.label}>
-                <span className={styles.pVal}>{p.value != null ? p.value.toFixed(1) : 'device feed'}</span>
-                <span className={styles.pName}>{p.label}</span>
+            ].map((item) => (
+              <div className={styles.pChip} key={item.label}>
+                <span className={styles.pVal}>{item.value != null ? item.value.toFixed(1) : 'device feed'}</span>
+                <span className={styles.pName}>{item.label}</span>
               </div>
             ))}
           </div>

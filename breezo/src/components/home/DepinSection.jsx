@@ -6,24 +6,24 @@ import styles from './DepinSection.module.css'
 const LAYERS = [
   {
     step: 'LAYER 01 · DEVICE',
-    icon: '🔧',
+    icon: 'Sensor',
     title: 'IoT Sensor Nodes',
-    desc: 'Anyone can host a BREEZO sensor node. Low-cost hardware, easy deployment, built for dense urban environments where pollution varies block by block.',
-    tags: ['PM2.5', 'PM10', 'CO₂', 'NO₂', 'BMP180'],
+    desc: 'BREEZO devices combine ESP32, PM2.5, DHT22, MQ135, BMP180, and GPS modules for hyperlocal air monitoring.',
+    tags: ['PM2.5', 'DHT22', 'MQ135', 'BMP180', 'GPS'],
   },
   {
     step: 'LAYER 02 · DATA',
-    icon: '⚡',
+    icon: 'Data',
     title: 'Real-Time Data Pipeline',
     desc: 'Raw sensor data is aggregated, validated, and structured in real time. Visualized on an interactive dashboard, accessible via REST API to developers, researchers, and policymakers.',
     tags: ['LIVE FEED', 'REST API', 'STREET-LEVEL', 'OPEN DATA'],
   },
   {
     step: 'LAYER 03 · INCENTIVE',
-    icon: '🪙',
+    icon: 'Token',
     title: 'Token Rewards on Solana',
-    desc: 'Contributors earn $BREEZ tokens for hosting nodes. Rewards scale with uptime, data quality, and network coverage. Transparent, programmatic, and fully verifiable on-chain.',
-    tags: ['SOLANA', '$BREEZ', 'DePIN', 'ON-CHAIN'],
+    desc: 'Contributors earn $BREEZO tokens for hosting nodes. Rewards scale with uptime, data quality, and network coverage. Transparent, programmatic, and fully verifiable on-chain.',
+    tags: ['SOLANA', '$BREEZO', 'DEPIN', 'ON-CHAIN'],
   },
 ]
 
@@ -31,7 +31,7 @@ const WHY_NOW = [
   'Affordable IoT hardware is finally accessible',
   'Solana enables low-cost, high-throughput rewards',
   "South Asia's pollution crisis demands urgency",
-  'DePIN has proven community-owned infra works',
+  'DePIN has proven community-owned infrastructure works',
 ]
 
 function TokenOrbit() {
@@ -44,61 +44,75 @@ function TokenOrbit() {
     let raf
 
     const orbits = [
-      { radius: 60,  speed: 0.012, nodeLabel: 'S1',  nodeColor: '#2DD4BF', startAngle: 0 },
-      { radius: 95,  speed: 0.007, nodeLabel: 'S2',  nodeColor: '#38BDF8', startAngle: 2.1 },
-      { radius: 95,  speed: 0.007, nodeLabel: 'S5',  nodeColor: '#38BDF8', startAngle: 5.2 },
-      { radius: 130, speed: 0.004, nodeLabel: 'S3',  nodeColor: '#A78BFA', startAngle: 1.0 },
-      { radius: 130, speed: 0.004, nodeLabel: 'S6',  nodeColor: '#A78BFA', startAngle: 3.2 },
-      { radius: 130, speed: 0.004, nodeLabel: 'S9',  nodeColor: '#A78BFA', startAngle: 5.0 },
+      { radius: 60, speed: 0.012, nodeLabel: 'S1', nodeColor: '#2DD4BF', startAngle: 0 },
+      { radius: 95, speed: 0.007, nodeLabel: 'S2', nodeColor: '#38BDF8', startAngle: 2.1 },
+      { radius: 95, speed: 0.007, nodeLabel: 'S5', nodeColor: '#38BDF8', startAngle: 5.2 },
+      { radius: 130, speed: 0.004, nodeLabel: 'S3', nodeColor: '#A78BFA', startAngle: 1.0 },
+      { radius: 130, speed: 0.004, nodeLabel: 'S6', nodeColor: '#A78BFA', startAngle: 3.2 },
+      { radius: 130, speed: 0.004, nodeLabel: 'S9', nodeColor: '#A78BFA', startAngle: 5.0 },
     ]
 
     let tick = 0
     function draw() {
-      const W = canvas.width, H = canvas.height
-      const cx = W / 2, cy = H / 2
-      ctx.clearRect(0, 0, W, H)
+      const width = canvas.width
+      const height = canvas.height
+      const cx = width / 2
+      const cy = height / 2
+      ctx.clearRect(0, 0, width, height)
 
-      // orbit rings
-      const ringRadii = [60, 95, 130]
-      ringRadii.forEach(r => {
-        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2)
+      ;[60, 95, 130].forEach((radius) => {
+        ctx.beginPath()
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2)
         ctx.strokeStyle = 'rgba(56,189,248,0.08)'
-        ctx.setLineDash([4, 8]); ctx.lineWidth = 1; ctx.stroke()
+        ctx.setLineDash([4, 8])
+        ctx.lineWidth = 1
+        ctx.stroke()
         ctx.setLineDash([])
       })
 
-      // nodes on orbits
-      orbits.forEach(o => {
-        const a = o.startAngle + tick * o.speed
-        const x = cx + Math.cos(a) * o.radius
-        const y = cy + Math.sin(a) * o.radius
+      orbits.forEach((orbit) => {
+        const angle = orbit.startAngle + tick * orbit.speed
+        const x = cx + Math.cos(angle) * orbit.radius
+        const y = cy + Math.sin(angle) * orbit.radius
 
-        // line to center
-        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y)
+        ctx.beginPath()
+        ctx.moveTo(cx, cy)
+        ctx.lineTo(x, y)
         ctx.strokeStyle = 'rgba(56,189,248,0.1)'
-        ctx.lineWidth = 1; ctx.setLineDash([2, 6]); ctx.stroke(); ctx.setLineDash([])
+        ctx.lineWidth = 1
+        ctx.setLineDash([2, 6])
+        ctx.stroke()
+        ctx.setLineDash([])
 
-        // node
-        ctx.beginPath(); ctx.arc(x, y, 12, 0, Math.PI * 2)
-        ctx.fillStyle = o.nodeColor + '22'; ctx.fill()
-        ctx.strokeStyle = o.nodeColor + 'AA'; ctx.lineWidth = 1.5; ctx.stroke()
-        ctx.fillStyle = o.nodeColor + 'CC'
-        ctx.font = 'bold 7px DM Mono,monospace'
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-        ctx.fillText(o.nodeLabel, x, y)
+        ctx.beginPath()
+        ctx.arc(x, y, 12, 0, Math.PI * 2)
+        ctx.fillStyle = `${orbit.nodeColor}22`
+        ctx.fill()
+        ctx.strokeStyle = `${orbit.nodeColor}AA`
+        ctx.lineWidth = 1.5
+        ctx.stroke()
+        ctx.fillStyle = `${orbit.nodeColor}CC`
+        ctx.font = 'bold 7px DM Mono, monospace'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText(orbit.nodeLabel, x, y)
       })
 
-      // center core
-      ctx.beginPath(); ctx.arc(cx, cy, 24, 0, Math.PI * 2)
-      ctx.fillStyle = 'rgba(56,189,248,0.14)'; ctx.fill()
-      ctx.strokeStyle = 'rgba(56,189,248,0.6)'; ctx.lineWidth = 2; ctx.stroke()
+      ctx.beginPath()
+      ctx.arc(cx, cy, 24, 0, Math.PI * 2)
+      ctx.fillStyle = 'rgba(56,189,248,0.14)'
+      ctx.fill()
+      ctx.strokeStyle = 'rgba(56,189,248,0.6)'
+      ctx.lineWidth = 2
+      ctx.stroke()
       ctx.fillStyle = 'rgba(56,189,248,0.9)'
-      ctx.font = 'bold 7.5px DM Mono,monospace'
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.font = 'bold 7.5px DM Mono, monospace'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
       ctx.fillText('BREEZO', cx, cy - 5)
       ctx.fillText('CHAIN', cx, cy + 6)
 
-      tick++
+      tick += 1
       raf = requestAnimationFrame(draw)
     }
 
@@ -106,12 +120,17 @@ function TokenOrbit() {
       canvas.width = canvas.offsetWidth
       canvas.height = canvas.offsetHeight
     }
+
     resize()
     draw()
 
-    const ro = new ResizeObserver(resize)
-    ro.observe(canvas)
-    return () => { cancelAnimationFrame(raf); ro.disconnect() }
+    const observer = new ResizeObserver(resize)
+    observer.observe(canvas)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      observer.disconnect()
+    }
   }, [])
 
   return (
@@ -131,7 +150,7 @@ export default function DepinSection() {
         <SectionLabel>Decentralized Physical Infrastructure</SectionLabel>
         <SectionTitle center>How the BREEZO Network works.</SectionTitle>
         <SectionSubtitle center>
-          Three interlocking layers — devices, data, and decentralized incentives — creating a
+          Three interlocking layers - devices, data, and decentralized incentives - creating a
           self-sustaining environmental intelligence network.
         </SectionSubtitle>
       </div>
@@ -145,7 +164,7 @@ export default function DepinSection() {
               <h3 className={styles.layerTitle}>{layer.title}</h3>
               <p className={styles.layerDesc}>{layer.desc}</p>
               <div className={styles.layerTags}>
-                {layer.tags.map(t => <MonoTag key={t}>{t}</MonoTag>)}
+                {layer.tags.map((tag) => <MonoTag key={tag}>{tag}</MonoTag>)}
               </div>
             </div>
           ))}
@@ -160,7 +179,7 @@ export default function DepinSection() {
             <div className={styles.rewardFormula}>
               <div className={styles.formulaLabel}>Reward Formula</div>
               <div className={styles.formulaCode}>
-                $BREEZ = f(uptime) × f(quality) × f(coverage)
+                $BREEZO = f(uptime) x f(quality) x f(coverage)
               </div>
             </div>
 

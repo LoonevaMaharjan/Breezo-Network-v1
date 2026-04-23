@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useAirQuality } from '../hooks/useAirQuality'
 import { CITIES } from '../lib/aqi'
+import { getActiveDeviceCityKeys } from '../lib/tokenizationApi'
+import { useAirQuality } from '../hooks/useAirQuality'
 import { LivePill } from '../components/ui/UI'
 import CitySelector from '../components/dashboard/CitySelector'
 import AQIHeroCard from '../components/dashboard/AQIHeroCard'
@@ -12,7 +13,8 @@ import CityCompareChart from '../components/dashboard/CityCompareChart'
 import styles from './DashboardPage.module.css'
 
 export default function DashboardPage() {
-  const [activeCity, setActiveCity] = useState('ktm')
+  const activeCities = getActiveDeviceCityKeys()
+  const [activeCity, setActiveCity] = useState(activeCities[0] ?? 'ktm')
   const { data, loading, error, refetch } = useAirQuality(activeCity)
 
   const now = new Date()
@@ -29,12 +31,8 @@ export default function DashboardPage() {
             <span className={styles.metaText}>
               {dateStr} · {timeStr} · BREEZO Network v1.0
             </span>
-            {data?.sourceLabel && <span className={styles.metaText}>{data.sourceLabel}</span>}
-            {error && (
-              <span className={styles.errorBadge}>
-                API error — showing cached data
-              </span>
-            )}
+            {/* {data?.sourceLabel && <span className={styles.metaText}>{data.sourceLabel}</span>}
+            {error && <span className={styles.errorBadge}>Device feed unavailable right now</span>} */}
           </div>
         </div>
         <button className={styles.refreshBtn} onClick={refetch} disabled={loading}>
@@ -48,11 +46,7 @@ export default function DashboardPage() {
       <CitySelector activeCity={activeCity} onChange={setActiveCity} />
 
       <div className={styles.mainGrid}>
-        <AQIHeroCard
-          cityName={CITIES[activeCity].name}
-          data={data}
-          loading={loading && !data}
-        />
+        <AQIHeroCard cityName={CITIES[activeCity].name} data={data} loading={loading && !data} />
         <MetricsGrid data={data} />
       </div>
 

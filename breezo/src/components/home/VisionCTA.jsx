@@ -5,21 +5,21 @@ import styles from './VisionCTA.module.css'
 
 const VISION_CARDS = [
   {
-    icon: '🌐',
-    title: 'Anyone can deploy a node',
-    desc: 'Low-cost hardware, simple setup. No permission, no gatekeepers.',
+    icon: 'Grid',
+    title: 'Real devices in real cities',
+    desc: 'BREEZO grows city by city through live AQI hardware deployments, not generic public feeds.',
     highlight: false,
   },
   {
-    icon: '📊',
+    icon: 'Data',
     title: 'Everyone can access insights',
-    desc: 'Open data layer. Public API. Real-time dashboards for citizens and policymakers.',
+    desc: 'Device-backed dashboards bring street-level air quality visibility to communities and policymakers.',
     highlight: true,
   },
   {
-    icon: '💸',
+    icon: 'Token',
     title: 'Contributors are directly rewarded',
-    desc: '$BREEZ tokens for every byte of valid, high-quality data contributed.',
+    desc: '$BREEZO tokens reward every valid, high-quality device contribution.',
     highlight: false,
   },
 ]
@@ -33,7 +33,9 @@ export function VisionSection() {
         <div ref={ref} className={styles.visionInner}>
           <SectionLabel>Vision</SectionLabel>
           <SectionTitle center>
-            Environmental data should be<br />real-time, hyperlocal, and open.
+            Environmental data should be
+            <br />
+            real-time, hyperlocal, and open.
           </SectionTitle>
 
           <div className={styles.visionGrid}>
@@ -64,17 +66,21 @@ export function HomeCTA() {
       <RevealWrapper visible={visible}>
         <div ref={ref} className={styles.ctaInner}>
           <SectionLabel>Join the Network</SectionLabel>
-          <h2 className={styles.ctaTitle}>Ready to become a<br />BREEZO node operator?</h2>
+          <h2 className={styles.ctaTitle}>
+            Want early access to
+            <br />
+            BREEZO launches?
+          </h2>
           <p className={styles.ctaDesc}>
-            Deploy a sensor, earn $BREEZ, and help build the world's most comprehensive real-time
-            air quality network — starting in South Asia.
+            Join the early BREEZO operator community and get notified when the next device onboarding
+            phase opens across our active air-quality cities.
           </p>
           <div className={styles.ctaBtns}>
             <button className={styles.btnSky} onClick={() => navigate('/dashboard')}>
               View Live Data
             </button>
-            <button className={styles.btnGhost}>
-              Deploy a Node →
+            <button className={styles.btnGhost} onClick={() => navigate('/waitlist')}>
+              Join Waitlist {'->'}
             </button>
           </div>
           <div className={styles.solanaRow}><SolanaTag /></div>
