@@ -1,12 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import { CITIES } from '../../lib/aqi'
 import { buildDeviceAirSnapshot, getActiveDeviceCityKeys, getDeviceDemo } from '../../lib/deviceDemo'
 import styles from './LiveMap.module.css'
 
-const TILE_SIZE = 256
-const MAP_WIDTH = 960
-const MAP_HEIGHT = 420
-const DEFAULT_ZOOM = 10
+const DEFAULT_CENTER = [27.7172, 85.324]
 
 function getMarkerColor(aqi) {
   if (aqi <= 50) return '#4ADE80'
@@ -17,68 +16,36 @@ function getMarkerColor(aqi) {
   return '#EF4444'
 }
 
-function lngToTileX(lon, zoom) {
-  return ((lon + 180) / 360) * Math.pow(2, zoom)
-}
+function createMarkerIcon(color, isActive) {
+  const size = isActive ? 22 : 18
+  const halo = isActive ? 10 : 6
 
-function latToTileY(lat, zoom) {
-  const latRad = (lat * Math.PI) / 180
-  return (
-    (1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2
-  ) * Math.pow(2, zoom)
-}
-
-function projectPoint(lat, lon, zoom, centerX, centerY) {
-  const worldX = lngToTileX(lon, zoom) * TILE_SIZE
-  const worldY = latToTileY(lat, zoom) * TILE_SIZE
-
-  return {
-    x: worldX - centerX + MAP_WIDTH / 2,
-    y: worldY - centerY + MAP_HEIGHT / 2,
-  }
-}
-
-function clamp(value, min, max) {
-  return Math.min(max, Math.max(min, value))
-}
-
-function buildTiles(centerLat, centerLon, zoom) {
-  const centerTileX = lngToTileX(centerLon, zoom)
-  const centerTileY = latToTileY(centerLat, zoom)
-  const centerWorldX = centerTileX * TILE_SIZE
-  const centerWorldY = centerTileY * TILE_SIZE
-
-  const startWorldX = centerWorldX - MAP_WIDTH / 2
-  const startWorldY = centerWorldY - MAP_HEIGHT / 2
-  const endWorldX = centerWorldX + MAP_WIDTH / 2
-  const endWorldY = centerWorldY + MAP_HEIGHT / 2
-
-  const startTileX = Math.floor(startWorldX / TILE_SIZE)
-  const endTileX = Math.floor(endWorldX / TILE_SIZE)
-  const startTileY = Math.floor(startWorldY / TILE_SIZE)
-  const endTileY = Math.floor(endWorldY / TILE_SIZE)
-
-  const maxTile = Math.pow(2, zoom)
-  const tiles = []
-
-  for (let tileX = startTileX; tileX <= endTileX; tileX += 1) {
-    for (let tileY = startTileY; tileY <= endTileY; tileY += 1) {
-      if (tileY < 0 || tileY >= maxTile) continue
-
-      const wrappedX = ((tileX % maxTile) + maxTile) % maxTile
-      tiles.push({
-        key: `${zoom}-${tileX}-${tileY}`,
-        src: `https://tile.openstreetmap.org/${zoom}/${wrappedX}/${tileY}.png`,
-        left: tileX * TILE_SIZE - startWorldX,
-        top: tileY * TILE_SIZE - startWorldY,
-      })
-    }
-  }
-
-  return { tiles, centerWorldX, centerWorldY }
+  return L.divIcon({
+    className: '',
+    html: `
+      <div style="
+        width:${size}px;
+        height:${size}px;
+        border-radius:999px;
+        background:${color};
+        border:3px solid rgba(7,8,10,0.96);
+        box-shadow:0 0 0 ${halo}px ${color}22, 0 10px 22px rgba(0,0,0,0.36);
+      "></div>
+    `,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+    popupAnchor: [0, -size / 2],
+  })
 }
 
 export default function LiveMap({ activeCity }) {
+  const containerRef = useRef(null)
+  const mapRef = useRef(null)
+  const markersRef = useRef([])
+  const resizeObserverRef = useRef(null)
+  const [mapError, setMapError] = useState('')
+  const [mapReady, setMapReady] = useState(false)
+
   const devices = useMemo(() => {
     return getActiveDeviceCityKeys().map((cityKey) => {
       const city = CITIES[cityKey]
@@ -88,44 +55,118 @@ export default function LiveMap({ activeCity }) {
       return {
         cityKey,
         cityLabel: city.label,
-        lat: telemetry.gps?.lat ?? city.lat,
-        lon: telemetry.gps?.lon ?? city.lon,
+        coords: [telemetry.gps?.lat ?? city.lat, telemetry.gps?.lon ?? city.lon],
         aqi: snapshot.aqi,
-        color: getMarkerColor(snapshot.aqi),
         status: snapshot.info.label,
+        color: getMarkerColor(snapshot.aqi),
       }
     })
   }, [])
 
-  const selectedCityKey = activeCity || devices[0]?.cityKey || null
-  const [clickedCityKey, setClickedCityKey] = useState(null)
-  const focusedCityKey = clickedCityKey || selectedCityKey
+  useEffect(() => {
+    if (!containerRef.current || mapRef.current) return
 
-  const center = useMemo(() => {
-    if (!devices.length) return { lat: 27.7172, lon: 85.324 }
-    if (devices.length === 1) return { lat: devices[0].lat, lon: devices[0].lon }
-
-    const avgLat = devices.reduce((sum, device) => sum + device.lat, 0) / devices.length
-    const avgLon = devices.reduce((sum, device) => sum + device.lon, 0) / devices.length
-    return { lat: avgLat, lon: avgLon }
-  }, [devices])
-
-  const mapData = useMemo(() => {
-    const { tiles, centerWorldX, centerWorldY } = buildTiles(center.lat, center.lon, DEFAULT_ZOOM)
-
-    const markers = devices.map((device) => {
-      const point = projectPoint(device.lat, device.lon, DEFAULT_ZOOM, centerWorldX, centerWorldY)
-      return {
-        ...device,
-        left: clamp(point.x, 18, MAP_WIDTH - 18),
-        top: clamp(point.y, 18, MAP_HEIGHT - 18),
+    try {
+      if (containerRef.current.offsetHeight === 0) {
+        setMapError('Map container height is zero.')
+        return
       }
-    })
 
-    return { tiles, markers }
-  }, [center, devices])
+      const map = L.map(containerRef.current, {
+        zoomControl: false,
+        attributionControl: false,
+        dragging: true,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        touchZoom: true,
+        boxZoom: true,
+        keyboard: true,
+      })
 
-  const selectedDevice = mapData.markers.find((device) => device.cityKey === focusedCityKey) ?? mapData.markers[0]
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+      }).addTo(map)
+
+      L.control.zoom({ position: 'bottomright' }).addTo(map)
+      map.whenReady(() => {
+        setMapReady(true)
+      })
+      mapRef.current = map
+
+      resizeObserverRef.current = new ResizeObserver(() => {
+        map.invalidateSize()
+      })
+      resizeObserverRef.current.observe(containerRef.current)
+
+      requestAnimationFrame(() => map.invalidateSize())
+      window.setTimeout(() => map.invalidateSize(), 120)
+      window.setTimeout(() => map.invalidateSize(), 420)
+
+      setMapError('')
+      setMapReady(true)
+    } catch (error) {
+      setMapError(error.message || 'Unable to initialize map.')
+      setMapReady(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+
+    try {
+      map.invalidateSize()
+
+      markersRef.current.forEach((marker) => marker.remove())
+      markersRef.current = []
+
+      devices.forEach((device) => {
+        const marker = L.marker(device.coords, {
+          icon: createMarkerIcon(device.color, device.cityKey === activeCity),
+        })
+
+        marker.bindPopup(
+          `<div class="breezo-popup">
+            <div class="breezo-popup__city">${device.cityLabel}</div>
+            <div class="breezo-popup__aqi">AQI ${device.aqi}</div>
+          </div>`,
+          { closeButton: false, offset: [0, -8] }
+        )
+
+        marker.addTo(map)
+        markersRef.current.push(marker)
+      })
+
+      if (devices.length === 1) {
+        map.setView(devices[0].coords, 11)
+      } else if (devices.length > 1) {
+        map.fitBounds(L.latLngBounds(devices.map((d) => d.coords)), {
+          padding: [28, 28],
+        })
+      } else {
+        map.setView(DEFAULT_CENTER, 9)
+      }
+
+      requestAnimationFrame(() => map.invalidateSize())
+      window.setTimeout(() => map.invalidateSize(), 180)
+    } catch (error) {
+      setMapError(error.message || 'Unable to load map data.')
+      setMapReady(false)
+    }
+  }, [activeCity, devices])
+
+  useEffect(() => {
+    return () => {
+      markersRef.current.forEach((marker) => marker.remove())
+      markersRef.current = []
+      resizeObserverRef.current?.disconnect()
+      resizeObserverRef.current = null
+      if (mapRef.current) {
+        mapRef.current.remove()
+        mapRef.current = null
+      }
+    }
+  }, [])
 
   return (
     <section className={styles.panel}>
@@ -141,60 +182,25 @@ export default function LiveMap({ activeCity }) {
         </div>
       </div>
 
-      <div className={styles.mapShell}>
-        <div className={styles.mapFrame}>
-          <div className={styles.tileLayer}>
-            {mapData.tiles.map((tile) => (
-              <img
-                key={tile.key}
-                src={tile.src}
-                alt=""
-                className={styles.tile}
-                style={{ left: `${tile.left}px`, top: `${tile.top}px` }}
-                loading="lazy"
-              />
-            ))}
-          </div>
-
-          <div className={styles.overlay}>
-            {mapData.markers.map((device) => {
-              const isActive = selectedDevice?.cityKey === device.cityKey
-
-              return (
-                <button
-                  key={device.cityKey}
-                  type="button"
-                  className={`${styles.marker} ${isActive ? styles.markerActive : ''}`}
-                  style={{ left: `${device.left}px`, top: `${device.top}px` }}
-                  onClick={() => setClickedCityKey(device.cityKey)}
-                  aria-label={`${device.cityLabel} AQI ${device.aqi}`}
-                >
-                  <span className={styles.markerPulse} style={{ background: `${device.color}33` }} />
-                  <span
-                    className={styles.markerDot}
-                    style={{ background: device.color, boxShadow: `0 0 0 6px ${device.color}22` }}
-                  />
-                </button>
-              )
-            })}
-
-            {selectedDevice && (
-              <div
-                className={styles.popup}
-                style={{
-                  left: `clamp(16px, ${selectedDevice.left}px, calc(100% - 190px))`,
-                  top: `clamp(16px, calc(${selectedDevice.top}px - 96px), calc(100% - 110px))`,
-                }}
-              >
-                <div className={styles.popupCity}>{selectedDevice.cityLabel}</div>
-                <div className={styles.popupAqi}>AQI {selectedDevice.aqi}</div>
-                <div className={styles.popupStatus} style={{ color: selectedDevice.color }}>
-                  {selectedDevice.status}
-                </div>
-              </div>
-            )}
-          </div>
+      {mapError && (
+        <div className={styles.errorState}>
+          <div className={styles.errorTitle}>Leaflet map unavailable</div>
+          <div className={styles.errorText}>{mapError}</div>
         </div>
+      )}
+
+      <div className={styles.mapShell}>
+        <div
+          ref={containerRef}
+          className={styles.mapFrame}
+          style={{ minHeight: '420px', height: '420px', width: '100%' }}
+        />
+        {!mapReady && !mapError && (
+          <div className={styles.loadingState}>
+            <div className={styles.loadingTitle}>Loading map...</div>
+            <div className={styles.loadingText}>Preparing the Leaflet device view.</div>
+          </div>
+        )}
       </div>
     </section>
   )

@@ -61,7 +61,7 @@ export default function Navbar() {
     <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
       <Link to="/" className={styles.logo}>
         <img src="/logo2.png" alt="BREEZO" className={styles.logoImg} />
-        BREEZO
+        BREEZO NETWORK
       </Link>
 
       <ul className={`${styles.links} ${menuOpen ? styles.open : ''}`}>

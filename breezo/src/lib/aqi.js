@@ -1,11 +1,11 @@
 // ─── City definitions ─────────────────────────────────────────────────────────
 export const CITIES = {
-  ktm: { key: 'ktm', name: 'KATHMANDU, NEPAL',  label: 'Kathmandu', lat: 27.717, lon: 85.317 },
-  pkr: { key: 'pkr', name: 'POKHARA, NEPAL',    label: 'Pokhara',   lat: 28.209, lon: 83.985 },
-  del: { key: 'del', name: 'DELHI, INDIA',       label: 'Delhi',     lat: 28.644, lon: 77.216 },
-  mum: { key: 'mum', name: 'MUMBAI, INDIA',      label: 'Mumbai',    lat: 19.076, lon: 72.877 },
-  lko: { key: 'lko', name: 'LAHORE, PAKISTAN',   label: 'Lahore',    lat: 31.549, lon: 74.343 },
-  dac: { key: 'dac', name: 'DHAKA, BANGLADESH',  label: 'Dhaka',     lat: 23.810, lon: 90.412 },
+  ktm: { key: 'ktm', name: 'KATHMANDU, NEPAL',  label: 'Kathmandu', lat: 27.707211258257196, lon: 85.32862162431204 }, 
+  // pkr: { key: 'pkr', name: 'POKHARA, NEPAL',    label: 'Pokhara',   lat: 28.209, lon: 83.985 },
+  // del: { key: 'del', name: 'DELHI, INDIA',       label: 'Delhi',     lat: 28.644, lon: 77.216 },
+  // mum: { key: 'mum', name: 'MUMBAI, INDIA',      label: 'Mumbai',    lat: 19.076, lon: 72.877 },
+  // lko: { key: 'lko', name: 'LAHORE, PAKISTAN',   label: 'Lahore',    lat: 31.549, lon: 74.343 },
+  // dac: { key: 'dac', name: 'DHAKA, BANGLADESH',  label: 'Dhaka',     lat: 23.810, lon: 90.412 },
 }
 
 // ─── US EPA AQI from PM2.5 ────────────────────────────────────────────────────

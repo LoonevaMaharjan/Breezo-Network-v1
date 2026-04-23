@@ -12,7 +12,7 @@ export const DEFAULT_DEVICE_DEMO_DATA = {
     pressure: 1012.6,
     mq135: 312.0,
     trendPm25: [58.2, 56.9, 55.1, 57.6, 59.0, 61.7, 63.8, 65.1, 64.4, 66.2, 68.1, 67.4],
-    gps: { lat: 27.7172, lon: 85.324, source: 'Live GPS' },
+    gps: { lat: 27.707268249932966, lon: 85.32864308198332, source: 'Live GPS' },
   },
 }
 
@@ -35,10 +35,13 @@ function readStoredDeviceDemoData() {
 
     const parsed = JSON.parse(raw)
     const sanitized = ACTIVE_DEVICE_CITY_KEYS.reduce((acc, key) => {
-      acc[key] = parsed[key] ? { ...clone(DEFAULT_DEVICE_DEMO_DATA[key]), ...parsed[key] } : clone(DEFAULT_DEVICE_DEMO_DATA[key])
+      const merged = parsed[key] ? { ...clone(DEFAULT_DEVICE_DEMO_DATA[key]), ...parsed[key] } : clone(DEFAULT_DEVICE_DEMO_DATA[key])
+      merged.gps = clone(DEFAULT_DEVICE_DEMO_DATA[key].gps)
+      acc[key] = merged
       return acc
     }, {})
 
+    window.localStorage.setItem(DEVICE_DEMO_STORAGE_KEY, JSON.stringify(sanitized))
     return sanitized
   } catch {
     return clone(DEFAULT_DEVICE_DEMO_DATA)
