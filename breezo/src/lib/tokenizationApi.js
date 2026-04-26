@@ -6,6 +6,9 @@ const DEFAULT_ACCOUNT = {
   email: 'owner@breezo.io',
   password: 'SecurePass123!',
   walletAddress: '',
+  tokenBalance: 240.512,
+  stakedTokens: 1250,
+  apiKeys: [],
   dashboard: {
     success: true,
     data: [
@@ -49,6 +52,25 @@ function buildMockWalletAddress(email) {
   return `${padded.slice(0, 8)}...${padded.slice(-8)}`
 }
 
+function generateApiKeySeed() {
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'
+  return Array.from({ length: 30 }, () => alphabet[Math.floor(Math.random() * alphabet.length)]).join('')
+}
+
+function buildApiKey() {
+  return `brz_live_${generateApiKeySeed()}`
+}
+
+function maskApiKey(apiKey) {
+  const value = String(apiKey || '').trim()
+  if (!value) return '••••••••'
+  return `${value.slice(0, 8)}••••••${value.slice(-6)}`
+}
+
+function formatDateStamp(date = new Date()) {
+  return new Date(date).toISOString()
+}
+
 export function getActiveDeviceCityKeys() {
   return getDeviceCityKeys()
 }
@@ -62,6 +84,17 @@ function shapeAccount(raw = {}) {
     ...clone(DEFAULT_ACCOUNT),
     ...raw,
     fullName: normalizedFullName ?? clone(DEFAULT_ACCOUNT).fullName,
+    apiKeys: Array.isArray(raw.apiKeys)
+      ? raw.apiKeys.map((key, index) => ({
+          id: key.id || `api_${index + 1}`,
+          name: String(key.name || `Key ${index + 1}`),
+          key: String(key.key || buildApiKey()),
+          createdAt: key.createdAt || formatDateStamp(),
+          usage: Number.isFinite(Number(key.usage)) ? Number(key.usage) : 0,
+          limit: Number.isFinite(Number(key.limit)) ? Number(key.limit) : 1000,
+          status: key.status === 'revoked' ? 'revoked' : 'active',
+        }))
+      : clone(DEFAULT_ACCOUNT.apiKeys),
     dashboard: {
       ...clone(DEFAULT_ACCOUNT.dashboard),
       ...(raw.dashboard ?? {}),
@@ -214,4 +247,105 @@ export async function disconnectOperatorWallet(session) {
 
   writeStoredAccount(nextAccount)
   return toDashboardPayload(nextAccount)
+}
+
+export async function getApiKeyDashboard(session) {
+  if (!session?.ownerEmail) {
+    throw new Error('Missing session')
+  }
+
+  const current = readStoredAccount()
+  if (current.email.toLowerCase() !== String(session.ownerEmail).toLowerCase()) {
+    throw new Error('Missing operator account')
+  }
+
+  const totalRequests = current.apiKeys.reduce((sum, key) => sum + Number(key.usage || 0), 0)
+  const costPerRequest = 0.001
+  const totalCost = totalRequests * costPerRequest
+
+  return {
+    owner: {
+      name: fallbackDisplayName(current),
+      email: current.email,
+    },
+    tokenBalance: current.tokenBalance,
+    stakedTokens: current.stakedTokens,
+    usageSummary: {
+      totalRequests,
+      totalCost,
+      costPerRequest,
+    },
+    apiKeys: current.apiKeys.map((key) => ({
+      id: key.id,
+      name: key.name,
+      maskedKey: maskApiKey(key.key),
+      createdAt: key.createdAt,
+      usage: key.usage,
+      limit: key.limit,
+      status: key.status,
+    })),
+  }
+}
+
+export async function createOperatorApiKey(session, { name, limit }) {
+  if (!session?.ownerEmail) {
+    throw new Error('Missing session')
+  }
+
+  const current = readStoredAccount()
+  if (current.email.toLowerCase() !== String(session.ownerEmail).toLowerCase()) {
+    throw new Error('Missing operator account')
+  }
+
+  const trimmedName = String(name || '').trim()
+  const numericLimit = Number(limit)
+
+  if (!trimmedName) {
+    throw new Error('Key name is required.')
+  }
+
+  if (!Number.isFinite(numericLimit) || numericLimit <= 0) {
+    throw new Error('Usage limit must be greater than 0.')
+  }
+
+  const nextKey = {
+    id: `api_${Date.now()}`,
+    name: trimmedName,
+    key: buildApiKey(),
+    createdAt: formatDateStamp(),
+    usage: 0,
+    limit: Math.floor(numericLimit),
+    status: 'active',
+  }
+
+  const nextAccount = shapeAccount({
+    ...current,
+    apiKeys: [nextKey, ...current.apiKeys],
+  })
+
+  writeStoredAccount(nextAccount)
+
+  return {
+    generatedKey: nextKey.key,
+    dashboard: await getApiKeyDashboard(session),
+  }
+}
+
+export async function deleteOperatorApiKey(session, keyId) {
+  if (!session?.ownerEmail) {
+    throw new Error('Missing session')
+  }
+
+  const current = readStoredAccount()
+  if (current.email.toLowerCase() !== String(session.ownerEmail).toLowerCase()) {
+    throw new Error('Missing operator account')
+  }
+
+  const nextAccount = shapeAccount({
+    ...current,
+    apiKeys: current.apiKeys.filter((key) => key.id !== keyId),
+  })
+
+  writeStoredAccount(nextAccount)
+  return getApiKeyDashboard(session)
 }

@@ -74,6 +74,15 @@ export default function Navbar() {
       </ul>
 
       <div className={styles.right}>
+        {session && (
+          <button
+            className={`${styles.quickLink} ${isActive('/api-keys') ? styles.quickLinkActive : ''}`}
+            onClick={() => navigate('/api-keys')}
+            type="button"
+          >
+            API Keys
+          </button>
+        )}
         {session ? (
           <div className={styles.profileWrap} ref={profileRef}>
             <button
@@ -95,6 +104,9 @@ export default function Navbar() {
                 </div>
                 <button className={styles.dropdownItem} onClick={() => navigate('/tokenization')} type="button" role="menuitem">
                   Open dashboard
+                </button>
+                <button className={styles.dropdownItem} onClick={() => navigate('/api-keys')} type="button" role="menuitem">
+                  API keys
                 </button>
                 <button className={styles.dropdownItem} onClick={handleLogout} type="button" role="menuitem">
                   Logout

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { buildTokenSession, readTokenSession, writeTokenSession } from '../lib/tokenization'
 import { signupOperator } from '../lib/tokenizationApi'
 import styles from './AuthPage.module.css'
@@ -16,7 +16,9 @@ function SignalCard({ label, value, note }) {
 
 export default function SignupPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const session = readTokenSession()
+  const redirectTarget = searchParams.get('redirect') || '/tokenization'
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -26,7 +28,7 @@ export default function SignupPage() {
   const [error, setError] = useState('')
 
   if (session) {
-    return <Navigate to="/tokenization" replace />
+    return <Navigate to={redirectTarget} replace />
   }
 
   function handleChange(event) {
@@ -42,7 +44,7 @@ export default function SignupPage() {
       setLoading(true)
       const account = await signupOperator(form)
       writeTokenSession(buildTokenSession(account))
-      navigate('/tokenization')
+      navigate(redirectTarget)
     } catch (e) {
       setError(e.message)
     } finally {

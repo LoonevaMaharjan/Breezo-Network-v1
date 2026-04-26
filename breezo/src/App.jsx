@@ -6,6 +6,7 @@ import MapPage from './pages/MapPage'
 import ProductPage from './pages/ProductPage'
 import AboutPage from './pages/AboutPage'
 import TokenizationPage from './pages/TokenizationPage'
+import ApiKeysPage from './pages/ApiKeysPage'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/tokenization" element={<TokenizationPage />} />
+        <Route path="/api-keys" element={<ApiKeysPage />} />
         <Route path="/product" element={<ProductPage />} />
         <Route path="/network" element={<ProductPage />} />
         <Route path="/about" element={<AboutPage />} />

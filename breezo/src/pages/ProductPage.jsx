@@ -10,17 +10,17 @@ const DEVICE_PRODUCTS = [
     summary:
       'The early physical prototype used to validate the sensing stack, device enclosure direction, and field telemetry behavior.',
     specs: [
-      ['Sensors', 'PM2.5, DHT22, MQ135, BMP180, GPS'],
+      ['Sensors', 'PM2.5, DHT22, MQ135'],
       ['Controller', 'ESP32 prototype board'],
       ['Stage', 'Field validation and enclosure testing'],
       ['Use case', 'Early AQI sensing and calibration trials'],
     ],
   },
   {
-    name: 'BREEZO Final Device',
-    type: 'Final device',
+    name: 'BREEZO V1',
+    type: 'Version 1 Device',
     image: '/device2.jpg',
-    alt: 'BREEZO final AQI device',
+    alt: 'BREEZO V1 Device',
     summary:
       'The refined device form intended for deployment, bringing the validated sensor stack into a cleaner and more production-ready package.',
     specs: [

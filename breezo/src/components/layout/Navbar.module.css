@@ -67,6 +67,28 @@
 
 .right { display: flex; align-items: center; gap: 12px; }
 
+.quickLink {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(56,189,248,0.18);
+  background: rgba(56,189,248,0.08);
+  color: var(--sky);
+  font: 700 11px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.quickLink:hover,
+.quickLinkActive {
+  background: rgba(56,189,248,0.16);
+  border-color: rgba(56,189,248,0.32);
+}
+
 .ctaBtn {
   background: var(--sky);
   color: #07080A;
@@ -110,6 +132,7 @@
 .profileBtn:focus-visible,
 .dropdownItem:focus-visible,
 .ctaBtn:focus-visible,
+.quickLink:focus-visible,
 .hamburger:focus-visible {
   outline: 2px solid var(--sky);
   outline-offset: 3px;
@@ -226,6 +249,7 @@
   }
   .links.open { transform: translateY(0); }
   .hamburger { display: flex; }
+  .quickLink { display: none; }
   .profileName { max-width: 96px; }
   .dropdown {
     right: 0;

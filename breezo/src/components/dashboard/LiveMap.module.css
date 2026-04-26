@@ -65,7 +65,7 @@
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
-  background: #0b1017;
+  background: #f8fafc;
 }
 
 .layout {
@@ -93,7 +93,7 @@
 .mapTopBar {
   padding: 12px 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .mapBadge,
@@ -122,7 +122,7 @@
   width: 100%;
   min-height: 372px;
   height: 372px;
-  background: #0b1017;
+  background: #f8fafc;
 }
 
 .layoutPage .mapFrame {
@@ -210,12 +210,18 @@
   gap: 14px;
 }
 
-.railHeader,
+.overviewCard,
 .detailCard {
   padding: 18px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: linear-gradient(180deg, rgba(15, 17, 21, 0.94), rgba(10, 12, 16, 0.98));
+}
+
+.overviewCard {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .railTitle,
@@ -230,6 +236,25 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-top: 14px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.nodeList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.nodeList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nodeList::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .nodeCard {
@@ -318,12 +343,12 @@
 :global(.leaflet-container) {
   width: 100%;
   height: 100%;
-  background: #0b1017;
+  background: #f8fafc;
   font-family: var(--font);
 }
 
 :global(.leaflet-tile) {
-  filter: brightness(0.42) saturate(0.72) contrast(1.08);
+  filter: none;
 }
 
 :global(.leaflet-control-zoom) {
@@ -465,6 +490,14 @@
 
   .mapShell {
     min-height: 300px;
+  }
+
+  .nodeRail {
+    overflow: visible;
+  }
+
+  .nodeList {
+    max-height: 320px;
   }
 
   .layoutPage .mapFrame {

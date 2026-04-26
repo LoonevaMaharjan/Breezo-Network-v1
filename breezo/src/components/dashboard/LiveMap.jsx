@@ -240,6 +240,7 @@ export default function LiveMap({ activeCity, mode = 'panel' }) {
 
         {!isPageMode && (
         <aside className={styles.nodeRail}>
+          <div className={styles.overviewCard}>
           <div className={styles.railHeader}>
             <div>
               <div className={styles.railKicker}>Node overview</div>
@@ -276,6 +277,7 @@ export default function LiveMap({ activeCity, mode = 'panel' }) {
                 </button>
               )
             })}
+          </div>
           </div>
 
           {selectedDevice && (
