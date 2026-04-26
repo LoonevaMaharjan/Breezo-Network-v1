@@ -3,39 +3,31 @@ import styles from './ProductPage.module.css'
 
 const DEVICE_PRODUCTS = [
   {
-    name: 'BREEZO Street Node',
-    type: 'Urban AQI device',
+    name: 'BREEZO Prototype Device',
+    type: 'Prototype',
+    image: '/device1.jpg',
+    alt: 'BREEZO AQI device prototype',
     summary:
-      'Outdoor-ready air quality node for roadside deployment, public zones, and dense city coverage.',
+      'The early physical prototype used to validate the sensing stack, device enclosure direction, and field telemetry behavior.',
     specs: [
       ['Sensors', 'PM2.5, DHT22, MQ135, BMP180, GPS'],
-      ['Controller', 'ESP32 low-power WiFi microcontroller'],
-      ['Connectivity', 'WiFi / hotspot uplink'],
-      ['Use case', 'Street-level AQI mapping and public monitoring'],
+      ['Controller', 'ESP32 prototype board'],
+      ['Stage', 'Field validation and enclosure testing'],
+      ['Use case', 'Early AQI sensing and calibration trials'],
     ],
   },
   {
-    name: 'BREEZO Campus Node',
-    type: 'Institutional device',
+    name: 'BREEZO Final Device',
+    type: 'Final device',
+    image: '/device2.jpg',
+    alt: 'BREEZO final AQI device',
     summary:
-      'Stable indoor-outdoor unit for schools, offices, campuses, and public institutions needing continuous AQI visibility.',
-    specs: [
-      ['Sensors', 'PM2.5, DHT22, MQ135, BMP180'],
-      ['Controller', 'ESP32 with scheduled sync'],
-      ['Power', 'Continuous USB / regulated supply'],
-      ['Use case', 'Schools, hospitals, municipal compounds'],
-    ],
-  },
-  {
-    name: 'BREEZO Portable Kit',
-    type: 'Mobile diagnostics',
-    summary:
-      'Compact AQI kit for rapid deployment, field validation, temporary studies, and hyperlocal mobile readings.',
+      'The refined device form intended for deployment, bringing the validated sensor stack into a cleaner and more production-ready package.',
     specs: [
       ['Sensors', 'PM2.5, DHT22, MQ135, BMP180, GPS'],
-      ['Controller', 'ESP32 compact board'],
-      ['Mobility', 'Portable enclosure with GPS tagging'],
-      ['Use case', 'Field surveys, pilots, pop-up monitoring'],
+      ['Controller', 'ESP32 production device controller'],
+      ['Stage', 'Deployment-ready device direction'],
+      ['Use case', 'Continuous live AQI monitoring'],
     ],
   },
 ]
@@ -89,21 +81,10 @@ const UPCOMING_ITEMS = [
   },
 ]
 
-function DeviceVisual({ label }) {
+function DevicePhoto({ src, alt, label }) {
   return (
-    <div className={styles.deviceVisual} aria-hidden="true">
-      <div className={styles.deviceShell}>
-        <div className={styles.deviceCap} />
-        <div className={styles.deviceScreen}>
-          <span className={styles.deviceBrand}>BREEZO</span>
-          <span className={styles.deviceValue}>AQI</span>
-        </div>
-        <div className={styles.devicePorts}>
-          <span />
-          <span />
-          <span />
-        </div>
-      </div>
+    <div className={styles.deviceVisual}>
+      <img className={styles.deviceImage} src={src} alt={alt} />
       <div className={styles.deviceLabel}>{label}</div>
     </div>
   )
@@ -140,7 +121,7 @@ export default function ProductPage() {
         <div className={styles.deviceGrid}>
           {DEVICE_PRODUCTS.map((device) => (
             <article key={device.name} className={styles.deviceCard}>
-              <DeviceVisual label={device.type} />
+              <DevicePhoto src={device.image} alt={device.alt} label={device.type} />
               <div className={styles.deviceInfo}>
                 <div className={styles.deviceType}>{device.type}</div>
                 <h3 className={styles.deviceName}>{device.name}</h3>
