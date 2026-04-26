@@ -67,6 +67,7 @@ export default function Navbar() {
       <ul className={`${styles.links} ${menuOpen ? styles.open : ''}`}>
         <li><Link to="/"          className={isActive('/')          ? styles.active : ''}>Home</Link></li>
         <li><Link to="/dashboard" className={isActive('/dashboard') ? styles.active : ''}>Dashboard</Link></li>
+        <li><Link to="/map"       className={isActive('/map')       ? styles.active : ''}>Map</Link></li>
         <li><Link to="/network"   className={isActive('/network')   ? styles.active : ''}>Network</Link></li>
         <li><Link to="/about"     className={isActive('/about')     ? styles.active : ''}>About</Link></li>
       </ul>

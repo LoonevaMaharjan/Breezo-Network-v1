@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import Layout from './components/layout/Layout'
 import HomePage from './pages/HomePage'
 import DashboardPage from './pages/DashboardPage'
+import MapPage from './pages/MapPage'
 import NetworkPage from './pages/NetworkPage'
 import AboutPage from './pages/AboutPage'
 import TokenizationPage from './pages/TokenizationPage'
@@ -14,6 +15,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/map" element={<MapPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/tokenization" element={<TokenizationPage />} />

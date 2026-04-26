@@ -1,4 +1,5 @@
 export const TOKENIZATION_DEMO_STORAGE_KEY = 'breezo-tokenization-demo-data'
+import { getActiveDeviceCityKeys as getDeviceCityKeys } from './deviceDemo'
 
 const DEFAULT_ACCOUNT = {
   fullName: 'Aether Node Owner',
@@ -31,7 +32,7 @@ function clone(data) {
 }
 
 export function getActiveDeviceCityKeys() {
-  return ['ktm']
+  return getDeviceCityKeys()
 }
 
 function shapeAccount(raw = {}) {

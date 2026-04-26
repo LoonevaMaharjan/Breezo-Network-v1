@@ -7,6 +7,7 @@ import CitySelector from '../components/dashboard/CitySelector'
 import AQIHeroCard from '../components/dashboard/AQIHeroCard'
 import MetricsGrid from '../components/dashboard/MetricsGrid'
 import TrendChart from '../components/dashboard/TrendChart'
+import HistoryWeek from '../components/dashboard/HistoryWeek'
 import WHOBars from '../components/dashboard/WHOBars'
 import LiveMap from '../components/dashboard/LiveMap'
 import HealthCards from '../components/dashboard/HealthCards'
@@ -51,12 +52,6 @@ export default function DashboardPage() {
         <MetricsGrid data={data} />
       </div>
 
-      <WHOBars data={data} />
-      <TrendChart trend={data?.trend} />
-      <LiveMap activeCity={activeCity} />
-      <HealthCards data={data} />
-      <CityCompareChart />
-
       <div className={styles.quickRef}>
         <div className={styles.qrHeader}>AQI Quick Reference</div>
         <div className={styles.qrGrid}>
@@ -78,6 +73,13 @@ export default function DashboardPage() {
           ))}
         </div>
       </div>
+
+      {/* <WHOBars data={data} /> */}
+      {/* <TrendChart trend={data?.trend} /> */}
+      <HistoryWeek history={data?.history} />
+      <LiveMap activeCity={activeCity} />
+      <HealthCards data={data} />
+      <CityCompareChart />
     </div>
   )
 }

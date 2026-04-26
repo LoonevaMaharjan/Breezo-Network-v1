@@ -16,7 +16,52 @@ export const DEFAULT_DEVICE_DEMO_DATA = {
     pressure: 1012.6,
     mq135: 312.0,
     trendPm25: [58.2, 56.9, 55.1, 57.6, 59.0, 61.7, 63.8, 65.1, 64.4, 66.2, 68.1, 67.4],
+    historyPm25: [54.1, 57.8, 61.2, 59.6, 63.4, 60.1, 62.4],
+    historyTemperature: [23.4, 24.0, 24.6, 24.1, 25.2, 24.7, 24.8],
+    historyHumidity: [61.2, 60.4, 59.1, 60.0, 58.6, 58.9, 58.4],
+    historyPressure: [1010.8, 1011.4, 1012.1, 1011.7, 1013.2, 1012.9, 1012.6],
+    historyMq135: [298.1, 302.4, 307.2, 304.6, 315.8, 309.9, 312.0],
     gps: { lat: 27.707268249932966, lon: 85.32864308198332, source: 'Live GPS' },
+  },
+  patan: {
+    deviceId: 'PAT-01-2208',
+    sourceLabel: 'BREEZO device feed',
+    connectivity: 'online',
+    lastSeen: '18 sec ago',
+    uptime: 98.1,
+    sampleRate: '20s',
+    pm25: 38.7,
+    temperature: 22.9,
+    humidity: 64.8,
+    pressure: 1009.4,
+    mq135: 274.5,
+    trendPm25: [34.8, 35.5, 36.1, 35.7, 36.4, 37.2, 38.0, 39.1, 38.8, 39.5, 39.1, 38.7],
+    historyPm25: [31.4, 33.2, 35.1, 34.6, 36.0, 37.4, 38.7],
+    historyTemperature: [21.8, 22.0, 22.4, 22.3, 22.6, 22.7, 22.9],
+    historyHumidity: [68.2, 67.0, 66.1, 65.8, 65.0, 64.9, 64.8],
+    historyPressure: [1007.8, 1008.2, 1008.9, 1008.7, 1009.1, 1009.2, 1009.4],
+    historyMq135: [251.2, 258.4, 264.0, 266.8, 270.1, 272.6, 274.5],
+    gps: { lat: 27.67344488290327, lon: 85.32537424684148, source: 'Live GPS' },
+  },
+  jawa: {
+    deviceId: 'JAW-01-4412',
+    sourceLabel: 'BREEZO device feed',
+    connectivity: 'online',
+    lastSeen: '27 sec ago',
+    uptime: 97.4,
+    sampleRate: '25s',
+    pm25: 71.6,
+    temperature: 29.4,
+    humidity: 71.1,
+    pressure: 1006.8,
+    mq135: 356.2,
+    trendPm25: [63.4, 64.9, 66.5, 67.8, 68.4, 69.2, 70.1, 71.8, 72.0, 72.4, 71.9, 71.6],
+    historyPm25: [58.2, 60.6, 64.7, 66.2, 68.9, 70.8, 71.6],
+    historyTemperature: [27.6, 27.9, 28.3, 28.6, 28.8, 29.1, 29.4],
+    historyHumidity: [74.8, 74.1, 73.0, 72.6, 72.1, 71.6, 71.1],
+    historyPressure: [1005.4, 1005.7, 1006.0, 1006.1, 1006.4, 1006.6, 1006.8],
+    historyMq135: [322.5, 329.8, 338.4, 342.0, 348.7, 353.1, 356.2],
+    gps: { lat: 27.671905776699937, lon: 85.30820161455541, source: 'Live GPS' },
   },
 }
 
@@ -88,6 +133,11 @@ export function getDeviceDemo(cityKey, city = CITIES[cityKey]) {
       pressure: 1010,
       mq135: 300,
       trendPm25: Array.from({ length: 12 }, () => 0),
+      historyPm25: Array.from({ length: 7 }, () => 0),
+      historyTemperature: Array.from({ length: 7 }, () => 25),
+      historyHumidity: Array.from({ length: 7 }, () => 60),
+      historyPressure: Array.from({ length: 7 }, () => 1010),
+      historyMq135: Array.from({ length: 7 }, () => 300),
       gps: { lat: fallbackCity.lat, lon: fallbackCity.lon, source: 'City profile' },
     }
   )
@@ -99,11 +149,44 @@ export function buildDeviceAirSnapshot(cityKey) {
   const trendSeries = Array.isArray(device.trendPm25) && device.trendPm25.length
     ? device.trendPm25
     : Array.from({ length: 12 }, () => device.pm25 ?? 0)
+  const historySeries = Array.isArray(device.historyPm25) && device.historyPm25.length
+    ? device.historyPm25
+    : Array.from({ length: 7 }, () => device.pm25 ?? 0)
+  const historyTemperatureSeries = Array.isArray(device.historyTemperature) && device.historyTemperature.length
+    ? device.historyTemperature
+    : Array.from({ length: historySeries.length }, () => device.temperature ?? 25)
+  const historyHumiditySeries = Array.isArray(device.historyHumidity) && device.historyHumidity.length
+    ? device.historyHumidity
+    : Array.from({ length: historySeries.length }, () => device.humidity ?? 60)
+  const historyPressureSeries = Array.isArray(device.historyPressure) && device.historyPressure.length
+    ? device.historyPressure
+    : Array.from({ length: historySeries.length }, () => device.pressure ?? 1010)
+  const historyMq135Series = Array.isArray(device.historyMq135) && device.historyMq135.length
+    ? device.historyMq135
+    : Array.from({ length: historySeries.length }, () => device.mq135 ?? 300)
 
   const trend = {
     labels: trendSeries.map((_, index) => `${trendSeries.length - index - 1}h`),
     pm25: trendSeries.map((value) => Number((value ?? 0).toFixed(1))),
   }
+  const history = historySeries.map((value, index) => {
+    const pm25Value = Number((value ?? 0).toFixed(1))
+    const day = new Date()
+    day.setDate(day.getDate() - (historySeries.length - index - 1))
+    const aqi = aqiFromPM25(pm25Value)
+
+    return {
+      label: day.toLocaleDateString([], { weekday: 'short' }),
+      fullLabel: day.toLocaleDateString([], { month: 'short', day: 'numeric' }),
+      pm25: pm25Value,
+      temperature: Number((historyTemperatureSeries[index] ?? device.temperature ?? 25).toFixed(1)),
+      humidity: Number((historyHumiditySeries[index] ?? device.humidity ?? 60).toFixed(1)),
+      pressure: Number((historyPressureSeries[index] ?? device.pressure ?? 1010).toFixed(1)),
+      mq135: Number((historyMq135Series[index] ?? device.mq135 ?? 300).toFixed(1)),
+      aqi,
+      info: getAQIInfo(aqi),
+    }
+  })
 
   const pm25 = Number((device.pm25 ?? trend.pm25[trend.pm25.length - 1] ?? 0).toFixed(1))
   const aqi = aqiFromPM25(pm25)
@@ -123,5 +206,6 @@ export function buildDeviceAirSnapshot(cityKey) {
     gps: device.gps ?? { lat: city.lat, lon: city.lon, source: 'City profile' },
     sourceLabel: device.sourceLabel ?? 'BREEZO device feed',
     trend,
+    history,
   }
 }

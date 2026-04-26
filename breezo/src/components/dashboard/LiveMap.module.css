@@ -6,6 +6,13 @@
   overflow: hidden;
 }
 
+.panelPage {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
 .header {
   display: flex;
   align-items: flex-start;
@@ -53,6 +60,7 @@
 }
 
 .mapShell {
+  position: relative;
   min-height: 420px;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -64,6 +72,11 @@
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) 360px;
   gap: 16px;
+}
+
+.layoutPage {
+  grid-template-columns: 1fr;
+  min-height: calc(100vh - 94px);
 }
 
 .mapTopBar,
@@ -110,6 +123,85 @@
   min-height: 372px;
   height: 372px;
   background: #0b1017;
+}
+
+.layoutPage .mapFrame {
+  min-height: calc(100vh - 120px);
+  height: calc(100vh - 120px);
+}
+
+.layoutPage .mapShell {
+  min-height: calc(100vh - 94px);
+  border-radius: 22px;
+}
+
+.layoutPage .mapTopBar {
+  padding: 10px 14px;
+}
+
+.overlayCard {
+  position: absolute;
+  top: 58px;
+  right: 14px;
+  z-index: 500;
+  width: min(320px, calc(100% - 28px));
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 12, 17, 0.82);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+}
+
+.overlayTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.overlayLabel,
+.overlayItem span {
+  font: 700 10px/1.2 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--t3);
+}
+
+.overlayTitle {
+  margin-top: 6px;
+  color: var(--t1);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.overlayAqi {
+  font: 800 13px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.overlayGrid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.overlayItem {
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.overlayItem strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--t1);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .nodeRail {
@@ -256,8 +348,42 @@
   margin: 12px 14px !important;
 }
 
+:global(.mapMarkerDot) {
+  width: var(--marker-size);
+  height: var(--marker-size);
+  border-radius: 999px;
+  background: rgba(7, 8, 10, 0.96);
+  border: 3px solid var(--marker-color);
+  box-shadow:
+    0 0 0 var(--marker-halo) color-mix(in srgb, var(--marker-color) 16%, transparent),
+    0 10px 22px rgba(0, 0, 0, 0.36);
+  animation: markerPulseBlink 1.25s ease-in-out infinite;
+}
+
+:global(.mapMarkerDotSelected) {
+  border-width: 4px;
+}
+
+@keyframes markerPulseBlink {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow:
+      0 0 0 var(--marker-halo) color-mix(in srgb, var(--marker-color) 18%, transparent),
+      0 10px 22px rgba(0, 0, 0, 0.36);
+  }
+
+  50% {
+    transform: scale(1.16);
+    opacity: 0.72;
+    box-shadow:
+      0 0 0 calc(var(--marker-halo) + 6px) color-mix(in srgb, var(--marker-color) 10%, transparent),
+      0 10px 22px rgba(0, 0, 0, 0.36);
+  }
+}
+
 .popupContent {
-  min-width: 132px;
+  min-width: 220px;
 }
 
 .popupCity {
@@ -277,6 +403,44 @@
   margin-top: 4px;
   font-size: 12px;
   font-weight: 600;
+}
+
+.popupGrid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.popupItem {
+  padding: 8px 9px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.popupItem span,
+.popupFoot {
+  font: 700 10px/1.2 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--t3);
+}
+
+.popupItem strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--t1);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.popupFoot {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 @media (max-width: 768px) {
@@ -303,7 +467,24 @@
     min-height: 300px;
   }
 
+  .layoutPage .mapFrame {
+    min-height: calc(100vh - 100px);
+    height: calc(100vh - 100px);
+  }
+
+  .overlayCard {
+    top: 52px;
+    left: 14px;
+    right: 14px;
+    width: auto;
+  }
+
   .detailGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .overlayGrid,
+  .popupGrid {
     grid-template-columns: 1fr;
   }
 }

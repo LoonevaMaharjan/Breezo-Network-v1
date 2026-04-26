@@ -5,7 +5,7 @@ import { getActiveDeviceCityKeys } from '../../lib/tokenizationApi'
 import { Chip, LivePill } from '../ui/UI'
 import styles from './Hero.module.css'
 
-const CITY_LABELS = { ktm: 'Kathmandu', pkr: 'Pokhara', del: 'Delhi' }
+const CITY_LABELS = { ktm: 'Kathmandu', patan: 'Patan', del: 'Delhi' }
 
 function AQICell({ cityKey, data }) {
   const info = data?.info

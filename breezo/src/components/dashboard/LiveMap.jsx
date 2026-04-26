@@ -24,14 +24,14 @@ function createMarkerIcon(color, isActive) {
   return L.divIcon({
     className: '',
     html: `
-      <div style="
-        width:${size}px;
-        height:${size}px;
-        border-radius:999px;
-        background:${color};
-        border:3px solid rgba(7,8,10,0.96);
-        box-shadow:0 0 0 ${halo}px ${color}22, 0 10px 22px rgba(0,0,0,0.36);
-      "></div>
+      <div
+        class="mapMarkerDot ${isActive ? 'mapMarkerDotSelected' : ''}"
+        style="
+          --marker-size:${size}px;
+          --marker-color:${color};
+          --marker-halo:${halo}px;
+        "
+      ></div>
     `,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
@@ -69,7 +69,7 @@ function FitMapToDevices({ devices, selectedCoords }) {
   return null
 }
 
-export default function LiveMap({ activeCity }) {
+export default function LiveMap({ activeCity, mode = 'panel' }) {
   const devices = useMemo(() => {
     return getActiveDeviceCityKeys().map((cityKey) => {
       const city = CITIES[cityKey]
@@ -107,27 +107,71 @@ export default function LiveMap({ activeCity }) {
   }, [activeCity])
 
   const selectedDevice = devices.find((device) => device.cityKey === selectedCityKey) ?? devices[0]
+  const isPageMode = mode === 'page'
 
   return (
-    <section className={styles.panel}>
-      <div className={styles.header}>
-        <div>
-          <div className={styles.kicker}>Device network map</div>
-          <h3 className={styles.title}>Live device operations view</h3>
+    <section className={`${styles.panel} ${mode === 'page' ? styles.panelPage : ''}`}>
+      {mode !== 'page' && (
+        <div className={styles.header}>
+          <div>
+            <div className={styles.kicker}>Device network map</div>
+            <h3 className={styles.title}>Live device operations view</h3>
+          </div>
+          <div className={styles.legend}>
+            <span className={styles.legendItem}><i style={{ background: '#4ADE80' }} />Clean</span>
+            <span className={styles.legendItem}><i style={{ background: '#FCD34D' }} />Moderate</span>
+            <span className={styles.legendItem}><i style={{ background: '#EF4444' }} />Polluted</span>
+          </div>
         </div>
-        <div className={styles.legend}>
-          <span className={styles.legendItem}><i style={{ background: '#4ADE80' }} />Clean</span>
-          <span className={styles.legendItem}><i style={{ background: '#FCD34D' }} />Moderate</span>
-          <span className={styles.legendItem}><i style={{ background: '#EF4444' }} />Polluted</span>
-        </div>
-      </div>
+      )}
 
-      <div className={styles.layout}>
+      <div className={`${styles.layout} ${mode === 'page' ? styles.layoutPage : ''}`}>
         <div className={styles.mapShell}>
           <div className={styles.mapTopBar}>
             <span className={styles.mapBadge}>Leaflet live map</span>
             <span className={styles.mapMeta}>{devices.length} node{devices.length === 1 ? '' : 's'} tracked</span>
           </div>
+
+          {isPageMode && selectedDevice && (
+            <div className={styles.overlayCard}>
+              <div className={styles.overlayTop}>
+                <div>
+                  <div className={styles.overlayLabel}>Selected device</div>
+                  <div className={styles.overlayTitle}>{selectedDevice.cityLabel}</div>
+                </div>
+                <span className={styles.overlayAqi} style={{ color: selectedDevice.color }}>
+                  AQI {selectedDevice.aqi}
+                </span>
+              </div>
+
+              <div className={styles.overlayGrid}>
+                <div className={styles.overlayItem}>
+                  <span>PM2.5</span>
+                  <strong>{selectedDevice.telemetry.pm25?.toFixed(1)}</strong>
+                </div>
+                <div className={styles.overlayItem}>
+                  <span>Temp</span>
+                  <strong>{selectedDevice.telemetry.temperature?.toFixed(1)} C</strong>
+                </div>
+                <div className={styles.overlayItem}>
+                  <span>Humidity</span>
+                  <strong>{selectedDevice.telemetry.humidity?.toFixed(1)} %</strong>
+                </div>
+                <div className={styles.overlayItem}>
+                  <span>Pressure</span>
+                  <strong>{selectedDevice.telemetry.pressure?.toFixed(1)} hPa</strong>
+                </div>
+                <div className={styles.overlayItem}>
+                  <span>MQ135</span>
+                  <strong>{selectedDevice.telemetry.mq135?.toFixed(1)}</strong>
+                </div>
+                <div className={styles.overlayItem}>
+                  <span>Last seen</span>
+                  <strong>{selectedDevice.lastSeen}</strong>
+                </div>
+              </div>
+            </div>
+          )}
 
           <MapContainer
             center={DEFAULT_CENTER}
@@ -150,18 +194,51 @@ export default function LiveMap({ activeCity }) {
                   click: () => setSelectedCityKey(device.cityKey),
                 }}
               >
+                {!isPageMode && (
                 <Popup closeButton={false} offset={[0, -8]}>
                   <div className={styles.popupContent}>
                     <div className={styles.popupCity}>{device.cityLabel}</div>
                     <div className={styles.popupAqi}>AQI {device.aqi}</div>
                     <div className={styles.popupStatus} style={{ color: device.color }}>{device.status}</div>
+                    <div className={styles.popupGrid}>
+                      <div className={styles.popupItem}>
+                        <span>PM2.5</span>
+                        <strong>{device.telemetry.pm25?.toFixed(1)}</strong>
+                      </div>
+                      <div className={styles.popupItem}>
+                        <span>Temp</span>
+                        <strong>{device.telemetry.temperature?.toFixed(1)} C</strong>
+                      </div>
+                      <div className={styles.popupItem}>
+                        <span>Humidity</span>
+                        <strong>{device.telemetry.humidity?.toFixed(1)} %</strong>
+                      </div>
+                      <div className={styles.popupItem}>
+                        <span>Pressure</span>
+                        <strong>{device.telemetry.pressure?.toFixed(1)} hPa</strong>
+                      </div>
+                      <div className={styles.popupItem}>
+                        <span>MQ135</span>
+                        <strong>{device.telemetry.mq135?.toFixed(1)}</strong>
+                      </div>
+                      <div className={styles.popupItem}>
+                        <span>Uptime</span>
+                        <strong>{device.uptime?.toFixed(1)}%</strong>
+                      </div>
+                    </div>
+                    <div className={styles.popupFoot}>
+                      <span>{device.lastSeen}</span>
+                      <span>{device.connectivity}</span>
+                    </div>
                   </div>
                 </Popup>
+                )}
               </Marker>
             ))}
           </MapContainer>
         </div>
 
+        {!isPageMode && (
         <aside className={styles.nodeRail}>
           <div className={styles.railHeader}>
             <div>
@@ -250,6 +327,7 @@ export default function LiveMap({ activeCity }) {
             </div>
           )}
         </aside>
+        )}
       </div>
     </section>
   )

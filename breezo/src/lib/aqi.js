@@ -1,7 +1,8 @@
 // ─── City definitions ─────────────────────────────────────────────────────────
 export const CITIES = {
   ktm: { key: 'ktm', name: 'KATHMANDU, NEPAL',  label: 'Kathmandu', lat: 27.707211258257196, lon: 85.32862162431204 }, 
-  // pkr: { key: 'pkr', name: 'POKHARA, NEPAL',    label: 'Pokhara',   lat: 28.209, lon: 83.985 },
+  patan: { key: 'patan', name: 'PATAN, NEPAL',      label: 'Patan',      lat: 27.67344488290327, lon: 85.32537424684148 },
+  jawa:  { key: 'jawa',  name: 'JAWALAKHEL, NEPAL', label: 'Jawalakhel', lat: 27.671905776699937, lon: 85.30820161455541 },
   // del: { key: 'del', name: 'DELHI, INDIA',       label: 'Delhi',     lat: 28.644, lon: 77.216 },
   // mum: { key: 'mum', name: 'MUMBAI, INDIA',      label: 'Mumbai',    lat: 19.076, lon: 72.877 },
   // lko: { key: 'lko', name: 'LAHORE, PAKISTAN',   label: 'Lahore',    lat: 31.549, lon: 74.343 },
