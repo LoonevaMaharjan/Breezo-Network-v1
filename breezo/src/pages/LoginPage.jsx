@@ -19,6 +19,7 @@ export default function LoginPage() {
   const [searchParams] = useSearchParams()
   const session = readTokenSession()
   const redirectTarget = searchParams.get('redirect') || '/tokenization'
+  const [showPassword, setShowPassword] = useState(false)
   const [form, setForm] = useState({
     email: 'owner@breezo.io',
     password: 'SecurePass123!',
@@ -86,7 +87,24 @@ export default function LoginPage() {
 
             <label className={styles.field}>
               <span className={styles.fieldLabel}>Password</span>
-              <input className={styles.input} type="password" name="password" value={form.password} onChange={handleChange} required />
+              <div className={styles.passwordWrap}>
+                <input
+                  className={`${styles.input} ${styles.passwordInput}`}
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  className={styles.toggleBtn}
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </label>
 
             {error && <div className={styles.errorBox}>{error}</div>}

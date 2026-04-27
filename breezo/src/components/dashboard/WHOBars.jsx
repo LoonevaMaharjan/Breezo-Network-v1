@@ -18,14 +18,14 @@ export default function WHOBars({ data }) {
   return (
     <div className={styles.panel}>
       <div className={styles.header}>
-        <h3 className={styles.title}>PM2.5 Safety Reference</h3>
-        <span className={styles.sub}>Instant comparison against WHO PM2.5 guideline</span>
+        <h3 className={styles.title}>Fine Particle Safety Reference</h3>
+        <span className={styles.sub}>Instant comparison against WHO fine particle guideline</span>
       </div>
 
       <div className={styles.bars}>
         <div className={styles.row}>
           <div className={styles.rowLabel}>
-            <span className={styles.pollutantName}>PM2.5</span>
+            <span className={styles.pollutantName}>Fine particle</span>
             <span className={styles.pollutantVal}>
               {val != null ? `${parseFloat(val).toFixed(1)} ug/m3` : 'Awaiting sensor'}
             </span>

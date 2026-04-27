@@ -8,8 +8,8 @@ const LAYERS = [
     step: 'LAYER 01 · DEVICE',
     icon: 'Sensor',
     title: 'IoT Sensor Nodes',
-    desc: 'BREEZO devices combine ESP32, PM2.5, DHT22, MQ135, BMP180, and GPS modules for hyperlocal air monitoring.',
-    tags: ['PM2.5', 'DHT22', 'MQ135', 'BMP180', 'GPS'],
+    desc: 'BREEZO devices combine ESP32, Fine particle, DHT22, CO2, BMP180, and GPS modules for hyperlocal air monitoring.',
+    tags: ['Fine particle', 'DHT22', 'CO2', 'BMP180', 'GPS'],
   },
   {
     step: 'LAYER 02 · DATA',

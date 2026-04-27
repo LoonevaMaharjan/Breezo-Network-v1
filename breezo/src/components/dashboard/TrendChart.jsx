@@ -44,13 +44,13 @@ export default function TrendChart({ trend }) {
   return (
     <div className={styles.panel}>
       <div className={styles.header}>
-        <h3 className={styles.title}>24-Hour PM2.5 Trend</h3>
+        <h3 className={styles.title}>24-Hour Fine Particle Trend</h3>
       </div>
 
       <div className={styles.legend}>
         <span className={styles.legendItem}>
           <span className={styles.legendDot} style={{ background: '#38BDF8' }} />
-          PM2.5 (ug/m3)
+          Fine particle (ug/m3)
         </span>
         <span className={styles.legendItem}>
           <span className={styles.legendDash} />
@@ -95,7 +95,7 @@ export default function TrendChart({ trend }) {
           <Area
             type="monotone"
             dataKey="pm25"
-            name="PM2.5"
+            name="Fine particle"
             stroke="#38BDF8"
             strokeWidth={2}
             fill="url(#gradPM25)"

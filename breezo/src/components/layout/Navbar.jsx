@@ -74,15 +74,6 @@ export default function Navbar() {
       </ul>
 
       <div className={styles.right}>
-        {session && (
-          <button
-            className={`${styles.quickLink} ${isActive('/api-keys') ? styles.quickLinkActive : ''}`}
-            onClick={() => navigate('/api-keys')}
-            type="button"
-          >
-            API Keys
-          </button>
-        )}
         {session ? (
           <div className={styles.profileWrap} ref={profileRef}>
             <button

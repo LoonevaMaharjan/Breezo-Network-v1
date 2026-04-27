@@ -53,7 +53,12 @@ export default function DashboardPage() {
       </div>
 
       <div className={styles.quickRef}>
-        <div className={styles.qrHeader}>AQI Quick Reference</div>
+        <div className={styles.qrHeaderRow}>
+          <div>
+            <div className={styles.qrHeader}>AQI Quick Reference</div>
+            <div className={styles.qrSub}>How BREEZO classifies live air quality at a glance</div>
+          </div>
+        </div>
         <div className={styles.qrGrid}>
           {[
             { range: '0 - 50', label: 'Good', color: '#4ADE80' },
@@ -65,7 +70,7 @@ export default function DashboardPage() {
           ].map((item) => (
             <div className={styles.qrItem} key={item.range}>
               <span className={styles.qrDot} style={{ background: item.color }} />
-              <div>
+              <div className={styles.qrItemBody}>
                 <div className={styles.qrRange} style={{ color: item.color }}>{item.range}</div>
                 <div className={styles.qrLabel}>{item.label}</div>
               </div>

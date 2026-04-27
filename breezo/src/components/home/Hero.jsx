@@ -39,9 +39,9 @@ function NetworkCanvas() {
     let raf
 
     const nodes = [
-      { label: 'PM2.5', r: 80, angle: 0.3, speed: 0.0008 },
+      { label: 'Fine particle', r: 80, angle: 0.3, speed: 0.0008 },
       { label: 'DHT22', r: 80, angle: 1.8, speed: 0.0008 },
-      { label: 'MQ1.3', r: 120, angle: 0.9, speed: 0.0005 },
+      { label: 'CO2', r: 120, angle: 0.9, speed: 0.0005 },
       { label: 'BMP', r: 60, angle: 4.2, speed: 0.0012 },
       { label: 'GPS', r: 100, angle: 3.5, speed: 0.0007 },
       { label: 'API', r: 90, angle: 5.8, speed: 0.0009 },
@@ -179,10 +179,10 @@ export default function Hero() {
 
           <div className={styles.pollutantBar}>
             {[
-              { label: 'PM2.5', value: leadCity?.pm25 },
+              { label: 'Fine particle', value: leadCity?.pm25 },
               { label: 'AQI', value: leadCity?.aqi },
               { label: 'DHT22', value: null },
-              { label: 'MQ135', value: null },
+              { label: 'CO2', value: null },
               { label: 'GPS', value: null },
             ].map((item) => (
               <div className={styles.pChip} key={item.label}>

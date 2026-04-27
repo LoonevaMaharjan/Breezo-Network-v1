@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { SolanaTag } from '../ui/UI'
 import styles from './Footer.module.css'
 
 export default function Footer() {
@@ -9,42 +8,41 @@ export default function Footer() {
         <div className={styles.brand}>
           <h3>BREEZO Network</h3>
           <p>Decentralized air quality infrastructure for the real world. Turning invisible air into visible truth.</p>
-          {/* <div className={styles.badgeRow}><SolanaTag /></div> */}
         </div>
+
         <div className={styles.col}>
           <h4>Product</h4>
           <ul>
             <li><Link to="/dashboard">Live Dashboard</Link></li>
+            <li><Link to="/map">Map</Link></li>
             <li><Link to="/product">AQI Devices</Link></li>
-            <li><Link to="/tokenization">Login</Link></li>
-            <li><a href="#">Data API</a></li>
-            <li><a href="#">Node Registry</a></li>
+            <li><Link to="/about">About</Link></li>
           </ul>
         </div>
+
         <div className={styles.col}>
-          <h4>Token</h4>
+          <h4>Operator</h4>
           <ul>
-            <li><a href="#">$BREEZO Tokenomics</a></li>
-            <li><a href="#">Reward Calculator</a></li>
-            <li><a href="#">On-chain Explorer</a></li>
+            <li><Link to="/login">Login</Link></li>
+            <li><Link to="/signup">Sign Up</Link></li>
+            <li><Link to="/tokenization">Token Dashboard</Link></li>
+            <li><Link to="/api-keys">API Keys</Link></li>
           </ul>
         </div>
+
         <div className={styles.col}>
-          <h4>Community</h4>
+          <h4>Explore</h4>
           <ul>
-            <li><a href="#">Discord</a></li>
-            <li><a href="#">Twitter / X</a></li>
-            <li><a href="#">Whitepaper</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/dashboard">AQI Dashboard</Link></li>
+            <li><Link to="/map">Network Map</Link></li>
+            <li><Link to="/product">Product</Link></li>
           </ul>
         </div>
       </div>
+
       <div className={styles.bottom}>
         <p>© 2025 BREEZO Network. All rights reserved.</p>
-        <div className={styles.bottomLinks}>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-        </div>
       </div>
     </footer>
   )

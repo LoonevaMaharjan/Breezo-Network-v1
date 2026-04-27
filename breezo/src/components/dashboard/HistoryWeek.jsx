@@ -31,7 +31,7 @@ export default function HistoryWeek({ history }) {
 
             <div className={styles.sensorGrid}>
               <div className={styles.sensorItem}>
-                <span>PM2.5</span>
+                <span>Fine particle</span>
                 <strong>{item.pm25.toFixed(1)}</strong>
               </div>
               <div className={styles.sensorItem}>
@@ -47,7 +47,7 @@ export default function HistoryWeek({ history }) {
                 <strong>{item.pressure.toFixed(1)}</strong>
               </div>
               <div className={styles.sensorItem}>
-                <span>MQ135</span>
+                <span>CO2</span>
                 <strong>{item.mq135.toFixed(1)}</strong>
               </div>
             </div>

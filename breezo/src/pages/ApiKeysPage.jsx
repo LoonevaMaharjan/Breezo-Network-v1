@@ -170,36 +170,28 @@ export default function ApiKeysPage() {
 
   return (
     <div className={styles.page}>
-      <section className={styles.consoleShell}>
-        <header className={styles.consoleHeader}>
-          <div className={styles.consoleBar}>
-            <span className={styles.consoleDotRed} />
-            <span className={styles.consoleDotAmber} />
-            <span className={styles.consoleDotGreen} />
-            <span className={styles.consolePath}>breezo / developer / api-keys</span>
+      <section className={styles.shell}>
+        <header className={styles.hero}>
+          <div className={styles.heroCopy}>
+            <div className={styles.kicker}>API key management</div>
+            <h1 className={styles.title}>Secure access for every data integration.</h1>
+            <p className={styles.subtitle}>
+              Create usage-limited credentials, review consumption costs, and manage BREEZO API
+              access from one premium control surface built for operators and partners.
+            </p>
           </div>
-          <div className={styles.heroRow}>
-            <div>
-              <div className={styles.kicker}>API key management</div>
-              <h1 className={styles.title}>Issue access keys and meter every request.</h1>
-              <p className={styles.subtitle}>
-                Generate usage-limited API keys, inspect token-backed request economics, and control
-                active integrations from a dedicated developer console.
-              </p>
+          <div className={styles.heroSummary}>
+            <div className={styles.heroMetric}>
+              <span>Total Requests</span>
+              <strong>{usageSummary.totalRequests.toLocaleString('en-US')}</strong>
             </div>
-            <div className={styles.summaryInline}>
-              <div className={styles.summaryInlineItem}>
-                <span>Total Requests</span>
-                <strong>{usageSummary.totalRequests.toLocaleString('en-US')}</strong>
-              </div>
-              <div className={styles.summaryInlineItem}>
-                <span>Total Cost</span>
-                <strong>{formatToken(usageSummary.totalCost)} TOK</strong>
-              </div>
-              <div className={styles.summaryInlineItem}>
-                <span>Cost / Request</span>
-                <strong>{formatToken(usageSummary.costPerRequest)}</strong>
-              </div>
+            <div className={styles.heroMetric}>
+              <span>Total Cost</span>
+              <strong>{formatToken(usageSummary.totalCost)} TOK</strong>
+            </div>
+            <div className={styles.heroMetric}>
+              <span>Cost / Request</span>
+              <strong>{formatToken(usageSummary.costPerRequest)}</strong>
             </div>
           </div>
         </header>
@@ -223,104 +215,138 @@ export default function ApiKeysPage() {
         </section>
 
         <section className={styles.workspace}>
-          <article className={styles.createPanel}>
-            <div className={styles.cardLabel}>Create API key</div>
-            <div className={styles.createTitle}>Provision a new access credential</div>
-            <p className={styles.createNote}>
-              Keys are shown exactly once after generation. Save them before leaving this screen.
-            </p>
-            <form className={styles.form} onSubmit={handleCreateKey}>
-              <label className={styles.field}>
-                <span>Key Name</span>
-                <input
-                  className={styles.input}
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Production analytics key"
-                  autoComplete="off"
-                  required
-                />
-              </label>
+          <div className={styles.leftColumn}>
+            <article className={styles.createPanel}>
+              <div className={styles.cardLabel}>Create API key</div>
+              <div className={styles.panelTitle}>Provision a new access credential</div>
+              <p className={styles.createNote}>
+                Name the key, define its request ceiling, and generate a credential for the
+                integration you want to authorize.
+              </p>
+              <form className={styles.form} onSubmit={handleCreateKey}>
+                <label className={styles.field}>
+                  <span>Key Name</span>
+                  <input
+                    className={styles.input}
+                    type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Production analytics key"
+                    autoComplete="off"
+                    required
+                  />
+                </label>
 
-              <label className={styles.field}>
-                <span>Usage Limit</span>
-                <input
-                  className={styles.input}
-                  type="number"
-                  min="1"
-                  step="1"
-                  name="limit"
-                  value={form.limit}
-                  onChange={handleChange}
-                  autoComplete="off"
-                  required
-                />
-              </label>
+                <label className={styles.field}>
+                  <span>Usage Limit</span>
+                  <input
+                    className={styles.input}
+                    type="number"
+                    min="1"
+                    step="1"
+                    name="limit"
+                    value={form.limit}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    required
+                  />
+                </label>
 
-              {error && <div className={styles.errorBox}>{error}</div>}
-              {flash && <div className={styles.flashBox}>{flash}</div>}
+                {error && <div className={styles.errorBox}>{error}</div>}
+                {flash && <div className={styles.flashBox}>{flash}</div>}
 
-              <button className={styles.primaryBtn} type="submit" disabled={submitting}>
-                {submitting ? 'Creating...' : 'Create API Key'}
-              </button>
-            </form>
+                <button className={styles.primaryBtn} type="submit" disabled={submitting}>
+                  {submitting ? 'Creating...' : 'Create API Key'}
+                </button>
+              </form>
+            </article>
 
             {generatedKey && (
-              <div className={styles.generatedCard}>
-                <div className={styles.generatedLabel}>Generated API Key</div>
-                <code className={styles.generatedKey}>{generatedKey}</code>
-                <button className={styles.secondaryBtn} type="button" onClick={handleCopyKey}>
-                  {copied ? 'Copied' : 'Copy API Key'}
-                </button>
-              </div>
-            )}
-          </article>
-
-          <article className={styles.keysPanel}>
-            <div className={styles.panelHeader}>
-              <div>
-                <div className={styles.cardLabel}>API keys list</div>
-                <div className={styles.panelTitle}>Manage issued keys</div>
-              </div>
-            </div>
-
-            {keys.length === 0 ? (
-              <div className={styles.emptyState}>
-                <strong>No API keys yet.</strong>
-                <p>Create your first key to start protected API access for your integrations.</p>
-              </div>
-            ) : (
-              <div className={styles.keysTable}>
-                <div className={styles.tableHead}>
-                  <span>Key Name</span>
-                  <span>API Key</span>
-                  <span>Created Date</span>
-                  <span>Usage</span>
-                  <span>Limit</span>
-                  <span>Status</span>
-                  <span>Action</span>
-                </div>
-
-                {keys.map((key) => (
-                  <div className={styles.tableRow} key={key.id}>
-                    <span>{key.name}</span>
-                    <code className={styles.maskedKey}>{key.maskedKey}</code>
-                    <span>{formatDate(key.createdAt)}</span>
-                    <span>{key.usage.toLocaleString('en-US')}</span>
-                    <span>{key.limit.toLocaleString('en-US')}</span>
-                    <span className={key.status === 'active' ? styles.statusActive : styles.statusRevoked}>
-                      {key.status}
-                    </span>
-                    <button className={styles.deleteBtn} type="button" onClick={() => handleDeleteKey(key.id)}>
-                      Delete
-                    </button>
+              <article className={styles.generatedCard}>
+                <div className={styles.generatedHeader}>
+                  <div>
+                    <div className={styles.generatedLabel}>Generated API Key</div>
+                    <p className={styles.generatedHint}>Shown once. Store it before leaving this page.</p>
                   </div>
-                ))}
-              </div>
+                  <button className={styles.secondaryBtn} type="button" onClick={handleCopyKey}>
+                    {copied ? 'Copied' : 'Copy API Key'}
+                  </button>
+                </div>
+                <code className={styles.generatedKey}>{generatedKey}</code>
+              </article>
             )}
-          </article>
+          </div>
+
+          <div className={styles.rightColumn}>
+            <article className={styles.keysPanel}>
+              <div className={styles.panelHeader}>
+                <div>
+                  <div className={styles.cardLabel}>API keys list</div>
+                  <div className={styles.panelTitle}>Manage issued keys</div>
+                </div>
+              </div>
+
+              {keys.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <strong>No API keys yet.</strong>
+                  <p>Create your first key to start protected API access for your integrations.</p>
+                </div>
+              ) : (
+                <div className={styles.keysTable}>
+                  <div className={styles.tableHead}>
+                    <span>Key Name</span>
+                    <span>API Key</span>
+                    <span>Created Date</span>
+                    <span>Usage</span>
+                    <span>Limit</span>
+                    <span>Status</span>
+                    <span>Action</span>
+                  </div>
+
+                  {keys.map((key) => (
+                    <div className={styles.tableRow} key={key.id}>
+                      <span>{key.name}</span>
+                      <code className={styles.maskedKey}>{key.maskedKey}</code>
+                      <span>{formatDate(key.createdAt)}</span>
+                      <span>{key.usage.toLocaleString('en-US')}</span>
+                      <span>{key.limit.toLocaleString('en-US')}</span>
+                      <span className={key.status === 'active' ? styles.statusActive : styles.statusRevoked}>
+                        {key.status}
+                      </span>
+                      <button className={styles.deleteBtn} type="button" onClick={() => handleDeleteKey(key.id)}>
+                        Delete
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </article>
+
+            <article className={styles.usagePanel}>
+              <div className={styles.panelHeader}>
+                <div>
+                  <div className={styles.cardLabel}>Usage summary</div>
+                  <div className={styles.panelTitle}>Token-backed consumption overview</div>
+                </div>
+              </div>
+
+              <div className={styles.usageGrid}>
+                <div className={styles.usageCard}>
+                  <span>Total Requests</span>
+                  <strong>{usageSummary.totalRequests.toLocaleString('en-US')}</strong>
+                </div>
+                <div className={styles.usageCard}>
+                  <span>Total Cost</span>
+                  <strong>{formatToken(usageSummary.totalCost)} TOK</strong>
+                </div>
+                <div className={styles.usageCard}>
+                  <span>Cost per Request</span>
+                  <strong>{formatToken(usageSummary.costPerRequest)} TOK</strong>
+                </div>
+              </div>
+            </article>
+          </div>
         </section>
 
         <article className={styles.flowPanel}>

@@ -235,7 +235,9 @@ export default function TokenizationPage() {
             </div>
             <div className={styles.snapshotCard}>
               <span>Wallet route</span>
-              <strong>{walletConnected ? formatWalletLabel(walletAddress) : 'Not connected'}</strong>
+              <strong className={styles.walletRouteValue}>
+                {walletConnected ? formatWalletLabel(walletAddress) : 'Not connected'}
+              </strong>
               <p>{walletConnected ? 'Reward destination bound.' : 'Connect before claims go live.'}</p>
             </div>
           </div>
@@ -351,7 +353,7 @@ export default function TokenizationPage() {
               <strong>{node.humidity.toFixed(1)} %</strong>
             </div>
             <div className={styles.fieldCard}>
-              <span>PM2.5</span>
+              <span>Fine particle</span>
               <strong>{node.pm25.toFixed(1)}</strong>
             </div>
             <div className={styles.fieldCard}>

@@ -10,7 +10,7 @@ const DEVICE_PRODUCTS = [
     summary:
       'The early physical prototype used to validate the sensing stack, device enclosure direction, and field telemetry behavior.',
     specs: [
-      ['Sensors', 'PM2.5, DHT22, MQ135'],
+      ['Sensors', 'Fine particle, DHT22, CO2'],
       ['Controller', 'ESP32 prototype board'],
       ['Stage', 'Field validation and enclosure testing'],
       ['Use case', 'Early AQI sensing and calibration trials'],
@@ -24,7 +24,7 @@ const DEVICE_PRODUCTS = [
     summary:
       'The refined device form intended for deployment, bringing the validated sensor stack into a cleaner and more production-ready package.',
     specs: [
-      ['Sensors', 'PM2.5, DHT22, MQ135, BMP180, GPS'],
+      ['Sensors', 'Fine particle, DHT22, CO2, BMP180, GPS'],
       ['Controller', 'ESP32 production device controller'],
       ['Stage', 'Deployment-ready device direction'],
       ['Use case', 'Continuous live AQI monitoring'],
@@ -33,9 +33,9 @@ const DEVICE_PRODUCTS = [
 ]
 
 const DEVICE_SPEC_ROWS = [
-  { label: 'PM2.5 sensor', value: 'Primary AQI particulate feed' },
+  { label: 'Fine particle sensor', value: 'Primary AQI particulate feed' },
   { label: 'DHT22', value: 'Temperature and humidity' },
-  { label: 'MQ135', value: 'Air quality gas trend indicator' },
+  { label: 'CO2', value: 'Air quality gas trend indicator' },
   { label: 'BMP180', value: 'Pressure / BMP atmospheric data' },
   { label: 'GPS', value: 'Exact device latitude and longitude' },
   { label: 'ESP32', value: 'Telemetry controller and network transport' },
@@ -140,15 +140,22 @@ export default function ProductPage() {
         </div>
 
         <div className={styles.techPanel}>
-          <div>
+          <div className={styles.techIntro}>
             <div className={styles.miniLabel}>Technical Specifications</div>
             <h3 className={styles.panelTitle}>Core hardware stack</h3>
+            <p className={styles.techCopy}>
+              The BREEZO device stack is designed to combine particulate sensing, environmental
+              telemetry, and precise location awareness in one deployable unit.
+            </p>
           </div>
           <div className={styles.techGrid}>
-            {DEVICE_SPEC_ROWS.map((row) => (
+            {DEVICE_SPEC_ROWS.map((row, index) => (
               <div className={styles.techRow} key={row.label}>
-                <span>{row.label}</span>
-                <strong>{row.value}</strong>
+                <div className={styles.techIndex}>{String(index + 1).padStart(2, '0')}</div>
+                <div className={styles.techBody}>
+                  <span>{row.label}</span>
+                  <strong>{row.value}</strong>
+                </div>
               </div>
             ))}
           </div>

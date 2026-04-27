@@ -162,6 +162,10 @@
   gap: 7px;
 }
 
+.passwordWrap {
+  position: relative;
+}
+
 .input {
   min-height: 46px;
   width: 100%;
@@ -174,13 +178,18 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
+.passwordInput {
+  padding-right: 80px;
+}
+
 .input::placeholder {
   color: #5f6d82;
 }
 
 .input:focus-visible,
 .primaryBtn:focus-visible,
-.linkBtn:focus-visible {
+.linkBtn:focus-visible,
+.toggleBtn:focus-visible {
   outline: 2px solid var(--sky);
   outline-offset: 3px;
 }
@@ -188,6 +197,29 @@
 .input:focus-visible {
   border-color: rgba(56, 189, 248, 0.28);
   box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.08);
+}
+
+.toggleBtn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  min-width: 58px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.045);
+  color: #b9c3d2;
+  font: 700 10px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.toggleBtn:hover {
+  color: var(--t1);
+  border-color: rgba(255,255,255,0.14);
 }
 
 .errorBox {

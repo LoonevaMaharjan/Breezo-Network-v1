@@ -191,12 +191,18 @@
 
 .techPanel {
   margin-top: 20px;
-  padding: 22px;
-  border-radius: 24px;
+  padding: 26px;
+  border-radius: 28px;
   border: 1px solid rgba(255,255,255,0.08);
   background:
+    radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 26%),
+    radial-gradient(circle at bottom left, rgba(167, 139, 250, 0.08), transparent 24%),
     linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
     rgba(9, 11, 16, 0.98);
+}
+
+.techIntro {
+  max-width: 620px;
 }
 
 .panelTitle {
@@ -205,9 +211,67 @@
   font-weight: 850;
 }
 
+.techCopy {
+  margin: 12px 0 0;
+  color: var(--t2);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
 .techGrid {
   margin-top: 18px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.techRow {
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 14px;
+  min-height: 132px;
+  padding: 18px;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
+    rgba(255,255,255,0.025);
+}
+
+.techIndex {
+  min-width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(56,189,248,0.16);
+  color: var(--sky);
+  font: 800 11px/1 var(--mono);
+  letter-spacing: 0.1em;
+}
+
+.techBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+.techBody span {
+  color: var(--t3);
+  font-size: 11px;
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.techBody strong {
+  color: var(--t1);
+  font-size: 15px;
+  line-height: 1.45;
+  text-align: left;
+  letter-spacing: -0.02em;
 }
 
 .altSection {

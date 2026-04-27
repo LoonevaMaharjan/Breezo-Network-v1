@@ -146,7 +146,7 @@ export default function LiveMap({ activeCity, mode = 'panel' }) {
 
               <div className={styles.overlayGrid}>
                 <div className={styles.overlayItem}>
-                  <span>PM2.5</span>
+                  <span>Fine particle</span>
                   <strong>{selectedDevice.telemetry.pm25?.toFixed(1)}</strong>
                 </div>
                 <div className={styles.overlayItem}>
@@ -162,7 +162,7 @@ export default function LiveMap({ activeCity, mode = 'panel' }) {
                   <strong>{selectedDevice.telemetry.pressure?.toFixed(1)} hPa</strong>
                 </div>
                 <div className={styles.overlayItem}>
-                  <span>MQ135</span>
+                  <span>CO2</span>
                   <strong>{selectedDevice.telemetry.mq135?.toFixed(1)}</strong>
                 </div>
                 <div className={styles.overlayItem}>
@@ -202,7 +202,7 @@ export default function LiveMap({ activeCity, mode = 'panel' }) {
                     <div className={styles.popupStatus} style={{ color: device.color }}>{device.status}</div>
                     <div className={styles.popupGrid}>
                       <div className={styles.popupItem}>
-                        <span>PM2.5</span>
+                        <span>Fine particle</span>
                         <strong>{device.telemetry.pm25?.toFixed(1)}</strong>
                       </div>
                       <div className={styles.popupItem}>
@@ -218,7 +218,7 @@ export default function LiveMap({ activeCity, mode = 'panel' }) {
                         <strong>{device.telemetry.pressure?.toFixed(1)} hPa</strong>
                       </div>
                       <div className={styles.popupItem}>
-                        <span>MQ135</span>
+                        <span>CO2</span>
                         <strong>{device.telemetry.mq135?.toFixed(1)}</strong>
                       </div>
                       <div className={styles.popupItem}>
@@ -302,7 +302,7 @@ export default function LiveMap({ activeCity, mode = 'panel' }) {
                   <strong>{selectedDevice.lastSeen}</strong>
                 </div>
                 <div className={styles.detailItem}>
-                  <span>PM2.5</span>
+                  <span>Fine particle</span>
                   <strong>{selectedDevice.telemetry.pm25?.toFixed(1)} ug/m3</strong>
                 </div>
                 <div className={styles.detailItem}>
@@ -318,7 +318,7 @@ export default function LiveMap({ activeCity, mode = 'panel' }) {
                   <strong>{selectedDevice.telemetry.pressure?.toFixed(1)} hPa</strong>
                 </div>
                 <div className={styles.detailItem}>
-                  <span>MQ135</span>
+                  <span>CO2</span>
                   <strong>{selectedDevice.telemetry.mq135?.toFixed(1)}</strong>
                 </div>
                 <div className={styles.detailItem}>
