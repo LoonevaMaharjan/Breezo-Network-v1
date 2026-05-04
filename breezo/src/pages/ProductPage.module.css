@@ -150,7 +150,6 @@
 }
 
 .specList,
-.techGrid,
 .upcomingList {
   display: grid;
   gap: 10px;
@@ -173,8 +172,7 @@
   border: 1px solid rgba(255,255,255,0.07);
 }
 
-.specItem span,
-.techRow span {
+.specItem span {
   color: var(--t3);
   font-size: 11px;
   font-family: var(--mono);
@@ -182,8 +180,7 @@
   letter-spacing: 0.12em;
 }
 
-.specItem strong,
-.techRow strong {
+.specItem strong {
   color: var(--t1);
   font-size: 13px;
   text-align: right;
@@ -218,65 +215,63 @@
   line-height: 1.75;
 }
 
-.techGrid {
+.techSpecSheet {
   margin-top: 18px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  display: grid;
+  gap: 8px;
 }
 
-.techRow span,
-.techRow strong {
-  text-align: left;
-}
-
-.techRow {
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 14px;
-  min-height: 132px;
-  padding: 18px;
-  border-radius: 20px;
+.dataNeedCard {
+  margin-top: 18px;
+  padding: 20px 22px;
+  border-radius: 22px;
+  border: 1px solid rgba(56, 189, 248, 0.14);
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
-    rgba(255,255,255,0.025);
+    radial-gradient(circle at top right, rgba(56, 189, 248, 0.1), transparent 28%),
+    rgba(255, 255, 255, 0.03);
 }
 
-.techIndex {
-  min-width: 42px;
-  height: 42px;
-  display: inline-flex;
+.dataNeedTitle {
+  margin: 10px 0 0;
+  color: var(--t1);
+  font-size: 22px;
+  font-weight: 820;
+  letter-spacing: -0.04em;
+}
+
+.dataNeedCopy {
+  margin: 12px 0 0;
+  max-width: 900px;
+  color: var(--t2);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.techSpecRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: center;
-  border-radius: 14px;
-  background: rgba(56,189,248,0.08);
-  border: 1px solid rgba(56,189,248,0.16);
-  color: var(--sky);
-  font: 800 11px/1 var(--mono);
-  letter-spacing: 0.1em;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-.techBody {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 14px;
-  min-width: 0;
+.techSpecRow:last-child {
+  border-bottom: none;
 }
 
-.techBody span {
-  color: var(--t3);
-  font-size: 11px;
-  font-family: var(--mono);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+.techSpecLabel {
+  color: var(--t2);
+  font-size: 15px;
+  line-height: 1.5;
 }
 
-.techBody strong {
+.techSpecValue {
   color: var(--t1);
   font-size: 15px;
   line-height: 1.45;
-  text-align: left;
-  letter-spacing: -0.02em;
+  text-align: right;
+  font-weight: 700;
 }
 
 .altSection {
@@ -372,7 +367,6 @@
     grid-template-columns: 1fr;
   }
 
-  .techGrid,
   .audienceGrid,
   .upcomingList {
     grid-template-columns: 1fr;
@@ -390,14 +384,20 @@
   }
 
   .specItem,
-  .techRow,
   .upcomingCard {
     flex-direction: column;
   }
 
-  .specItem strong,
-  .techRow strong,
-  .techBody strong {
+  .specItem strong {
+    text-align: left;
+  }
+
+  .techSpecRow {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .techSpecValue {
     text-align: left;
   }
 }

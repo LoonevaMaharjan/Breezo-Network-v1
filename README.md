@@ -106,15 +106,6 @@ breezo/
 - **Coverage**: Global, hourly, 7-day forecast + 1-day historical
 - **Cache**: 5 minutes in-memory per city key
 
-### Cities Monitored
-| Key  | City       | Country    | Coordinates          |
-|------|------------|------------|----------------------|
-| ktm  | Kathmandu  | Nepal      | 27.717N, 85.317E     |
-| pkr  | Pokhara    | Nepal      | 28.209N, 83.985E     |
-| del  | Delhi      | India      | 28.644N, 77.216E     |
-| mum  | Mumbai     | India      | 19.076N, 72.877E     |
-| lko  | Lahore     | Pakistan   | 31.549N, 74.343E     |
-| dac  | Dhaka      | Bangladesh | 23.810N, 90.412E     |
 
 ### AQI Calculation
 Uses the **US EPA AQI formula** based on PM2.5 concentration breakpoints.
@@ -129,20 +120,7 @@ Uses the **US EPA AQI formula** based on PM2.5 concentration breakpoints.
 
 ---
 
-## Adding More Cities
 
-In `src/lib/aqi.js`, add to the `CITIES` object:
-
-```js
-export const CITIES = {
-  // existing...
-  cbm: { key: 'cbm', name: 'COLOMBO, SRI LANKA', label: 'Colombo', lat: 6.927, lon: 79.861 },
-}
-```
-
-Then add `'cbm'` to `DISPLAY_CITIES` in `src/components/dashboard/CitySelector.jsx`.
-
----
 
 ## Deployment
 

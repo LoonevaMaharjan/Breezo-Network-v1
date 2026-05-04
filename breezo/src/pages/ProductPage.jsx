@@ -10,8 +10,9 @@ const DEVICE_PRODUCTS = [
     summary:
       'The early physical prototype used to validate the sensing stack, device enclosure direction, and field telemetry behavior.',
     specs: [
-      ['Sensors', 'Fine particle, DHT22, CO2'],
-      ['Controller', 'ESP32 prototype board'],
+      ['Sensors', 'PM2.5, MQ135, DHT22'],
+      ['Controller', 'ESP8266 prototype board'],
+      ['Display', 'OLED local readout'],
       ['Stage', 'Field validation and enclosure testing'],
       ['Use case', 'Early AQI sensing and calibration trials'],
     ],
@@ -24,8 +25,9 @@ const DEVICE_PRODUCTS = [
     summary:
       'The refined device form intended for deployment, bringing the validated sensor stack into a cleaner and more production-ready package.',
     specs: [
-      ['Sensors', 'Fine particle, DHT22, CO2, BMP180, GPS'],
-      ['Controller', 'ESP32 production device controller'],
+      ['Sensors', 'PM2.5, MQ135, DHT22'],
+      ['Controller', 'ESP8266 production controller'],
+      ['Display', 'OLED live AQI screen'],
       ['Stage', 'Deployment-ready device direction'],
       ['Use case', 'Continuous live AQI monitoring'],
     ],
@@ -33,12 +35,13 @@ const DEVICE_PRODUCTS = [
 ]
 
 const DEVICE_SPEC_ROWS = [
-  { label: 'Fine particle sensor', value: 'Primary AQI particulate feed' },
-  { label: 'DHT22', value: 'Temperature and humidity' },
-  { label: 'CO2', value: 'Air quality gas trend indicator' },
-  { label: 'BMP180', value: 'Pressure / BMP atmospheric data' },
-  { label: 'GPS', value: 'Exact device latitude and longitude' },
-  { label: 'ESP32', value: 'Telemetry controller and network transport' },
+  { label: 'PM2.5 Range', value: '0-1000 ug/m3' },
+  { label: 'MQ135 Gas Range', value: '10-1000 ppm' },
+  { label: 'Temperature Range', value: '-40 to 80°C' },
+  { label: 'Humidity Range', value: '0-100% RH' },
+  { label: 'ESP8266 Connectivity', value: '2.4 GHz Wi-Fi (802.11 b/g/n)' },
+  { label: 'OLED Display', value: '0.96" I2C, 128 × 64' },
+  { label: 'Operating Voltage', value: '3.3V logic / 5V device input' },
 ]
 
 const DASHBOARD_AUDIENCES = [
@@ -144,21 +147,29 @@ export default function ProductPage() {
             <div className={styles.miniLabel}>Technical Specifications</div>
             <h3 className={styles.panelTitle}>Core hardware stack</h3>
             <p className={styles.techCopy}>
-              The BREEZO device stack is designed to combine particulate sensing, environmental
-              telemetry, and precise location awareness in one deployable unit.
+              The BREEZO device stack is designed around a practical low-cost air sensing setup that
+              can capture particulate conditions, supporting gas trends, ambient environment data, and
+              a live local display in one deployable unit.
             </p>
           </div>
-          <div className={styles.techGrid}>
-            {DEVICE_SPEC_ROWS.map((row, index) => (
-              <div className={styles.techRow} key={row.label}>
-                <div className={styles.techIndex}>{String(index + 1).padStart(2, '0')}</div>
-                <div className={styles.techBody}>
-                  <span>{row.label}</span>
-                  <strong>{row.value}</strong>
-                </div>
+          <div className={styles.techSpecSheet}>
+            {DEVICE_SPEC_ROWS.map((row) => (
+              <div className={styles.techSpecRow} key={row.label}>
+                <span className={styles.techSpecLabel}>{row.label}</span>
+                <strong className={styles.techSpecValue}>{row.value}</strong>
               </div>
             ))}
           </div>
+          {/* <div className={styles.dataNeedCard}>
+            <div className={styles.miniLabel}>AQI Data Requirement</div>
+            <h3 className={styles.dataNeedTitle}>What data is required to show AQI?</h3>
+            <p className={styles.dataNeedCopy}>
+              To display AQI, the essential required reading is the PM2.5 value. With one valid PM2.5
+              measurement from the sensor, BREEZO can calculate and show the AQI level. DHT22 and MQ135
+              readings are not required for the AQI formula itself, but they help add environmental
+              context and richer dashboard insights around the AQI reading.
+            </p>
+          </div> */}
         </div>
       </section>
 
